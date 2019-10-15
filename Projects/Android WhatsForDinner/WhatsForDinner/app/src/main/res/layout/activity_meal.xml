@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Matthew Noffsinger
+CSCI 490
+Final project "Whats for dinner" app
+-->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAppBackground"
+    tools:context=".MealActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/mealsText"
+        android:textAllCaps="true"
+        android:textColor="@color/colorBigButtonText"
+        android:textSize="48dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBrowse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonBrowse"
+        android:layout_width="222dp"
+        android:layout_height="90dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorBigButton"
+        android:text="@string/buttonBrowse"
+        android:textColor="@color/colorBigButtonText"
+        android:textSize="@dimen/big_button_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.406" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/homeFABfromMeals"
+        android:layout_width="60dp"
+        android:layout_height="59dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:src="@drawable/ic_action_home"
+        android:tint="@color/colorPrimary"
+        app:backgroundTint="@color/colorSelected"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_optimizationLevel="direct"
+        app:rippleColor="@color/colorBigButton" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/familyFABfromMeals"
+        android:layout_width="60dp"
+        android:layout_height="59dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:src="@drawable/ic_action_family"
+        android:tint="@color/colorPrimary"
+        app:backgroundTint="@color/colorSelected"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_optimizationLevel="direct"
+        app:rippleColor="@color/colorBigButton" />
+
+    <Button
+        android:id="@+id/buttonCreate"
+        android:layout_width="222dp"
+        android:layout_height="90dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorBigButton"
+        android:text="@string/buttonCreate"
+        android:textColor="@color/colorBigButtonText"
+        android:textSize="@dimen/big_button_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.74" />
+</android.support.constraint.ConstraintLayout>

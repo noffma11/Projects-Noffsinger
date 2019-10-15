@@ -1,0 +1,31 @@
+The project has been split into a more "readable" section. The project structure is as follows:
+
+...
+
+inc/
+	ALL HEADERS
+
+src/ 
+	ALL SOURCE
+
+obj/
+	ALL OBJECTS
+
+build/
+	ALL BUILDS
+
+disk/
+	ALL "DISK FILES"
+
+Makefile
+
+...
+
+The Makefile has a few options:
+	* "make" to build the project
+	* "make clean" to remove objects
+	* "make run" to run
+
+
+If you have any questions, email either of us.
+Thanks!

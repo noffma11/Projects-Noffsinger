@@ -1,0 +1,88 @@
+function onLoad()
+    --THIS WILL BE UNIQUE FOR EACH BOARD
+    playerColor = {color = 'Red'}
+
+    self.createButton({
+        label="get", click_function="getDice", function_owner=self,
+        position={0.86,0.0,-0.5}, width=400, height=400, font_size=200
+    })
+
+    --self.createButton({
+    --    label="dNd", click_function="discardAndDraw", function_owner=self,
+    --    position={-0.09,0.0,-0.5}, width=400, height=400, font_size=200
+    --})
+
+end
+
+--[[function onLoad()
+    params = {
+        click_function = "click_func",
+        function_owner = self,
+        label          = "Test",
+        position       = {0, 1, 0},
+        rotation       = {0, 180, 0},
+        width          = 800,
+        height         = 400,
+        font_size      = 340,
+        color          = {0.5, 0.5, 0.5},
+        font_color     = {1, 1, 1},
+        tooltip        = "This text appears on mouseover.",
+    }
+    self.createButton(params)
+end
+
+function click_func(obj, color, alt_click)
+    print(obj)
+    print(color)
+    print(alt_click)
+end
+]]--
+
+
+function getDice(obj, color, alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+
+    diceSpawnParms = {
+        playerNumb = playerN,
+    }
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('getDice', diceSpawnParms)
+    Global.call('discardAndDraw', diceSpawnParms)
+
+end
+
+
+--[[function discardAndDraw(obj, color, alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+
+    diceSpawnParms = {
+        playerNumb = playerN,
+    }
+
+
+    Global.call('discardAndDraw', diceSpawnParms)
+
+
+end]]--

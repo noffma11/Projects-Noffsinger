@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:logs xmlns:ns2="de.vogella.xml.jaxb.model">
+    <reportList>
+        <report>
+            <name>Neal F.</name>
+            <time>12_13_2017 _ 21 17 58</time>
+            <hadUp>true</hadUp>
+            <notes>Sold a bunch</notes>
+        </report>
+        <report>
+            <name>Matt N.</name>
+            <time>12_13_2017 _ 21 18 12</time>
+            <hadUp>false</hadUp>
+            <notes></notes>
+        </report>
+    </reportList>
+    <locationAddress>Mishawaka - Granger</locationAddress>
+    <name>Mishawaka/Granger</name>
+</ns2:logs>

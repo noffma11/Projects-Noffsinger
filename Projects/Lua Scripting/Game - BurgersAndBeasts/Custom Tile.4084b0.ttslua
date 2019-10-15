@@ -1,0 +1,443 @@
+function onLoad()
+
+    paramRed = {
+        click_function = "SpawnRedDice",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,-0.88},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn Red Dice.",
+    }
+
+    paramGreen = {
+        click_function = "SpawnGreenDice",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,-0.66},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn Green Dice.",
+    }
+
+    paramBlack = {
+        click_function = "SpawnBlackDice",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,-0.44},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn Black Dice.",
+    }
+
+    paramPurple = {
+        click_function = "SpawnPurpleDice",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,-0.22},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn Purple Dice.",
+    }
+
+    paramBlue = {
+        click_function = "SpawnBlueDice",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,0.0},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn Blue Dice.",
+    }
+    paramWhite = {
+        click_function = "SpawnWhiteDice",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,0.22},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn White Dice.",
+    }
+
+    paramRedPotion = {
+        click_function = "SpawnRedPotion",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,0.43},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn Health Potion.",
+    }
+    paramGreenPotion = {
+        click_function = "SpawnGreenPotion",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,0.65},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn Stanima Potion.",
+    }
+    paramBluePotion = {
+        click_function = "SpawnBluePotion",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.0,0.87},
+        width          = 100, height = 100,
+        font_size      = 200,
+        tooltip        = "Spawn Magic Potion.",
+    }
+
+    self.createButton(paramRed)
+    self.createButton(paramGreen)
+    self.createButton(paramBlack)
+    self.createButton(paramPurple)
+    self.createButton(paramBlue)
+    self.createButton(paramWhite)
+    self.createButton(paramRedPotion)
+    self.createButton(paramGreenPotion)
+    self.createButton(paramBluePotion)
+
+    --self.createButton({
+    --    label="1", click_function="spawnRed", function_owner=self,
+    --    position={0.0,0.0,-0.82}, width=160, height=160, font_size=200
+    --})
+    --[[
+    self.createButton({
+        label="2", click_function="spawnGreen", function_owner=self,
+        position={0.0,0.0,-0.49}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="3", click_function="spawnBlack", function_owner=self,
+        position={0.0,0.0,-0.17}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="4", click_function="spawnPurple", function_owner=self,
+        position={0.0,0.0,0.16}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="5", click_function="spawnBlue", function_owner=self,
+        position={0.0,0.0,0.49}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="6", click_function="spawnWhite", function_owner=self,
+        position={0.0,0.0,0.82}, width=160, height=160, font_size=200
+    })
+    ]]--
+end
+
+
+function SpawnRedDice(obj, color, alt_click)
+    --print(obj)
+    --print(color)
+    --print(alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+    diceSpawnParms = {
+        itsGuild = "Warrior",
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+
+function SpawnGreenDice(obj, color, alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+    diceSpawnParms = {
+        itsGuild = "Druid",
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function SpawnBlackDice(obj, color, alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+    diceSpawnParms = {
+        itsGuild = "Rogue",
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function SpawnPurpleDice(obj, color, alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+    diceSpawnParms = {
+        itsGuild = "Wizard",
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function SpawnBlueDice(obj, color, alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+    diceSpawnParms = {
+        itsGuild = "Bard",
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function SpawnWhiteDice(obj, color, alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+    diceSpawnParms = {
+        itsGuild = "NPC",
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function SpawnRedPotion(obj, color, alt_click)
+    local playerN = ""
+    local potionColor = "red"
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+
+    diceSpawnParms = {
+        thePotionColor = potionColor,
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnPotion', diceSpawnParms)
+end
+
+function SpawnGreenPotion(obj, color, alt_click)
+    local playerN = ""
+    local potionColor = "green"
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+
+    diceSpawnParms = {
+        thePotionColor = potionColor,
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnPotion', diceSpawnParms)
+end
+
+function SpawnBluePotion(obj, color, alt_click)
+    local playerN = ""
+    local potionColor = "blue"
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+
+    diceSpawnParms = {
+        thePotionColor = potionColor,
+        playerNumb = playerN,
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnPotion', diceSpawnParms)
+end
+
+--[[function onLoad()
+    playerColor = {color = 'Red'}
+
+    self.createButton({
+        label="1", click_function="spawnRed", function_owner=self,
+        position={0.0,0.0,-0.82}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="2", click_function="spawnGreen", function_owner=self,
+        position={0.0,0.0,-0.49}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="3", click_function="spawnBlack", function_owner=self,
+        position={0.0,0.0,-0.17}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="4", click_function="spawnPurple", function_owner=self,
+        position={0.0,0.0,0.16}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="5", click_function="spawnBlue", function_owner=self,
+        position={0.0,0.0,0.49}, width=160, height=160, font_size=200
+    })
+
+    self.createButton({
+        label="6", click_function="spawnWhite", function_owner=self,
+        position={0.0,0.0,0.82}, width=160, height=160, font_size=200
+    })
+end
+
+
+
+function spawnRed()
+    diceSpawnParms = {
+        itsGuild = "Warrior",
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function spawnGreen()
+    diceSpawnParms = {
+        itsGuild = "Druid",
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function spawnBlack()
+    diceSpawnParms = {
+        itsGuild = "Rogue",
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function spawnPurple()
+    diceSpawnParms = {
+        itsGuild = "Wizard",
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function spawnBlue()
+    diceSpawnParms = {
+        itsGuild = "Bard",
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end
+
+function spawnWhite()
+    diceSpawnParms = {
+        itsGuild = "NPC",
+        amnt = 1,
+    }
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('spawnDice', diceSpawnParms)
+end]]--

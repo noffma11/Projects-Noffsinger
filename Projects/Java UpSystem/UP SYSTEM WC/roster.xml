@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<employeeList>
+    <manager id="0">
+        <firstName>Jimbo</firstName>
+        <lastName>Baggins</lastName>
+        <password>0</password>
+        <phone>5745555555</phone>
+    </manager>
+    <salesperson id="1111">
+        <firstName>Matt</firstName>
+        <lastName>Noffsinger</lastName>
+        <password>1</password>
+        <phone>5745333333</phone>
+    </salesperson>
+    <manager id="2222">
+        <firstName>Ash</firstName>
+        <lastName>Scarbrough</lastName>
+        <password>2</password>
+        <phone>5745361234</phone>
+    </manager>
+    <salesperson id="3333">
+        <firstName>Neal</firstName>
+        <lastName>Franks</lastName>
+        <password>3</password>
+        <phone>5744444444</phone>
+    </salesperson>
+    <salesperson id="4444">
+        <firstName>Jessica</firstName>
+        <lastName>Secviar</lastName>
+        <password>4</password>
+        <phone>5741234567</phone>
+    </salesperson>
+    <salesperson id="5555">
+        <firstName>Doc</firstName>
+        <lastName>Brown</lastName>
+        <password>5</password>
+        <phone>5748282828</phone>
+    </salesperson>
+    <salesperson id="6666">
+        <firstName>Marty</firstName>
+        <lastName>McFly</lastName>
+        <password>6</password>
+        <phone>5748888888</phone>
+    </salesperson>
+    <salesperson id="7777">
+        <firstName>Sheri</firstName>
+        <lastName>Jeavons</lastName>
+        <password>7</password>
+        <phone>7777777777</phone>
+    </salesperson>
+</employeeList>
+
+

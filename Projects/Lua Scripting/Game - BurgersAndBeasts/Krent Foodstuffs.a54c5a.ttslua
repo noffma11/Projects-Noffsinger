@@ -1,0 +1,56 @@
+function onLoad()
+    refTops = {
+        click_function = "RefreshToppings",
+        function_owner = self,
+        label          = "Refresh",
+        position       = {0.0,0.10,1.25},
+        width          = 300, height = 160,
+        font_size      = 80,
+        hover_color    = {0,255,0},
+        press_color    = {255,0,255},
+        tooltip        = "Refresh Toppings",
+    }
+
+    self.createButton(refTops)
+
+end
+
+
+function RefreshToppings(obj, color, alt_click)
+    local playerN = ""
+
+    if color == "White" then
+        playerN = "One"
+    elseif color == "Red" then
+        playerN = "Two"
+    elseif color == "Green" then
+        playerN = "Three"
+    elseif color == "Blue" then
+        playerN = "Four"
+    end
+
+
+    playerZoneInfo = Global.getTable('playerZoneInfo')
+    --getVar('string') is also helpful, remember for future
+
+    if playerN == "One" then
+        curDiscard = playerZoneInfo[1].discardPile
+        curDraw = playerZoneInfo[1].drawPile
+        print("WORKED")
+    elseif playerN == "Two" then
+        curDiscard =playerZoneInfo[2].discardPile
+        curDraw = playerZoneInfo[2].drawPile
+    elseif playerN == "Three" then
+        curDiscard = playerZoneInfo[3].discardPile
+        curDraw = playerZoneInfo[3].drawPile
+    elseif playerN == "Four" then
+        curDiscard = playerZoneInfo[4].discardPile
+        curDraw = playerZoneInfo[4].drawPile
+    end
+
+    dTable = {cDraw = curDraw, cPlayer = playerN, cDiscard = curDiscard}
+
+
+    --Global.call('setCurrentColor', playerColor)
+    Global.call('pantryWait', dTable)
+end

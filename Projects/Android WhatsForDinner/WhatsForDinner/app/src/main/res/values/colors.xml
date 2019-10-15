@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7a2711</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorSelected">#bfd62d</color>
+    <color name="colorBigButton">#ac8b3e</color>
+    <color name="colorBigButtonText">#7a2711</color>
+    <color name="colorAppBackground">#ef8f49</color>
+    <color name="cardViewColor">#f4dcc9</color>
+</resources>

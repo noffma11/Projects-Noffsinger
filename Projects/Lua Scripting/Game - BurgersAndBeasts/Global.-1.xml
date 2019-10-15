@@ -1,0 +1,143 @@
+<!-- Xml UI. See documentation: https://api.tabletopsimulator.com/ui/introUI/ -->
+
+<!--
+
+<Defaults>
+    <Panel class="TankChessPanel"  color="#8F8478" outline="#635351" outlineSize="2 -2"/>
+    <Button class="mapButton" padding="0 0 145 0" textColor="#FFFFFF" colors="#AD9F91|#C9B9A9|#756C63|rgba(0.78,0.78,0.78,0.5)"/>
+    <Image class="mapImage" width="144" height="144" rectAlignment="UpperCenter" offsetXY="0 -3"/>
+</Defaults>
+
+
+<Panel id="mapSelection" class="TankChessPanel"
+    width="680"
+    height="500"
+    rectAlignment="UpperCenter"
+    offsetXY="0 -250"
+    allowDragging="true"
+    showAnimation="FadeIn"
+    showAnimationDelay="2"
+    returnToOriginalPositionWhenReleased="false">
+    <VerticalScrollView
+        rectAlignment="LowerCenter"
+        offsetXY="0 -00"
+        scrollSensitivity="40"
+        padding="0 0 50 0"
+        scrollbarColors="#AD9F91|#C9B9A9|#756C63|rgba(0.78,0.78,0.78,0.5)"
+        width="680"
+        height="480"
+        color="#DDDDDD">
+
+        <GridLayout padding="0 0 8 3" spacing="8 8"  height="1400"
+            cellsize="150 190" childAlignment="UpperCenter">
+                <Button class="mapButton" onClick="setupStarter16x16" text="Starter Game 16x16">
+                    <Image class="mapImage" image="MapStarter16"></Image></Button>
+                <Button class="mapButton" onClick="setupStarter20x20" text="Starter Game 20x20">
+                    <Image class="mapImage" image="MapStarter20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupFortress16x16" text="Fortress 16x16">
+                    <Image class="mapImage" image="MapFortress16"></Image></Button>
+                <Button class="mapButton" onClick="setupFortress20x20" text="Fortress 20x20">
+                    <Image class="mapImage" image="MapFortress20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupOpenField16x16" text="Open Field 16x16">
+                    <Image class="mapImage" image="MapOpen16"></Image></Button>
+                <Button class="mapButton" onClick="setupOpenField20x20" text="Open Field 20x20">
+                    <Image class="mapImage" image="MapOpen20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupDiagonal16x16" text="Diagonal 16x16">
+                    <Image class="mapImage" image="MapDiagonal16"></Image></Button>
+                <Button class="mapButton" onClick="setupDiagonal20x20" text="Diagonal 20x20">
+                    <Image class="mapImage" image="MapDiagonal20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupSplitFormations16x16" text="Split Formations 16x16">
+                    <Image class="mapImage" image="MapSplit16"></Image></Button>
+                <Button class="mapButton" onClick="setupSplitFormations20x20" text="Split Formations 20x20">
+                    <Image class="mapImage" image="MapSplit20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupOldTown16x16" text="Old Town 16x16">
+                    <Image class="mapImage" image="MapOld16"></Image></Button>
+                <Button class="mapButton" onClick="setupOldTown20x20" text="Old Town 20x20">
+                    <Image class="mapImage" image="MapOld20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupCastle16x16" text="Castle 12x12">
+                    <Image class="mapImage" image="MapCastle16"></Image></Button>
+                <Button class="mapButton" onClick="setupCastle20x20" text="Castle 16x20">
+                    <Image class="mapImage" image="MapCastle20"></Image></Button>
+
+
+                <Image ignoreLayout="true" rectAlignment="LowerCenter" offsetXY="0 530" cellsize="40 40"
+                    height="40" width="600" image="Divider"></Image>
+                <Text></Text>
+                <Text></Text>
+                <Text ignoreLayout="true" offsetXY="0 -225" cellsize="40 40"
+                    text="Expansion Maps" fontStyle="Bold" fontSize="40"></Text>
+                <Text></Text>
+                <Text></Text>
+                <Text></Text>
+                <Text></Text>
+
+                <Button class="mapButton" onClick="setupRuins16x16" text="Ruins 16x16">
+                    <Image class="mapImage" image="MapRuins16"></Image></Button>
+                <Button class="mapButton" onClick="setupRuins20x20" text="Ruins 20x20">
+                    <Image class="mapImage" image="MapRuins20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupSwamp16x16" text="Swamp 16x16">
+                    <Image class="mapImage" image="MapSwamp16"></Image></Button>
+                <Button class="mapButton" onClick="setupSwamp20x20" text="Swamp 20x20">
+                    <Image class="mapImage" image="MapSwamp20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupRiver16x16" text="River 16x16">
+                    <Image class="mapImage" image="MapRiver16"></Image></Button>
+                <Button class="mapButton" onClick="setupRiver20x20" text="River 20x20">
+                    <Image class="mapImage" image="MapRiver20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupVillage16x16" text="Village 16x16">
+                    <Image class="mapImage" image="MapVillage16"></Image></Button>
+                <Button class="mapButton" onClick="setupVillage20x20" text="Village 20x20">
+                    <Image class="mapImage" image="MapVillage20"></Image></Button>
+
+                <Button class="mapButton" onClick="setupMultiplayer16x16" text="Multiplayer 16x16">
+                    <Image class="mapImage" image="MapMultiplayer16"></Image></Button>
+                <Button class="mapButton" onClick="setupMultiplayer20x20" text="Multiplayer 20x20">
+                    <Image class="mapImage" image="MapMultiplayer20"></Image></Button>
+
+        </GridLayout>
+
+    </VerticalScrollView>
+    <Button id="closeButton"
+        width="20"
+        height="20"
+        rectAlignment="UpperRight"
+        color="#990000"
+        textColor="#FFFFFF"
+        text="X"
+        onClick="switchCleanupToClose">
+    </Button>
+    <Text text="Choose a Map" alignment="UpperLeft" fontSize="18" offsetXY="5 0"
+        fontStyle="Bold" color="#FFFFFF"></Text>
+</Panel>
+
+
+
+
+
+<Panel id="cleanup" class="TankChessPanel"
+    rectAlignment="UpperRight"
+    active="false"
+    offsetXY="0 -50"
+    raycastTarget="true"
+    width="100"
+    height="50"
+    allowDragging="true"
+    padding="3 3 10 3"
+    showAnimation="FadeIn"
+    showAnimationDelay="2"
+    returnToOriginalPositionWhenReleased="false">
+    <Button id="cleanupButton"
+        text="Cleanup"
+        onClick="onCleanup">
+    </Button>
+</Panel>
+
+-->

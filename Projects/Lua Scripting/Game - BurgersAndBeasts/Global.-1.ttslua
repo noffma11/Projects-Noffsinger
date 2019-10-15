@@ -1,0 +1,2039 @@
+playerZoneInfo = {}
+--NOT NEEDED BUT KEEP FOR FUN
+spatula_GUID = 'ba2ce2'
+
+--THE BOARD
+game_board_GUID = 'b469f1'
+beast_life_tracker_GUID = '9c3cff'
+digital_clock_GUID = '4ad282'
+
+--DICE REFRENCED IN SPAWNING, ON SIDE OF TABLE
+dice_red_GUID = '177b59'
+dice_green_GUID = '53ebca'
+dice_white_GUID = 'd4215d'
+dice_blue_GUID = '8866b9'
+dice_black_GUID = '186274'
+dice_purple_GUID = 'acaece'
+
+--POTIONS
+potion_red_GUID = '03b7ce'
+potion_green_GUID = '8c84df'
+potion_blue_GUID = 'fb6f3a'
+
+--REFRENCES TO QUEST ITEMS
+quest_deck_GUID = '09f5de'
+quest_zone_GUID = '2272d5'
+
+--REFRENCES TO CHARACTER ITEMS
+char_location_one_GUID = 'aaa01e'
+char_location_two_GUID = '4a3338'
+char_location_three_GUID = 'ebe423'
+char_location_four_GUID = 'ef14fe'
+char_location_five_GUID = '75359b'
+
+pink_board_GUID = '8f5363'
+red_board_GUID = '5c1adc'
+blue_board_GUID = '12d393'
+brown_board_GUID = 'a54c5a'
+gray_board_GUID = '9c9b8c'
+
+board_pink_zone_GUID = 'a52be3'
+board_red_zone_GUID = 'd86a29'
+board_blue_zone_GUID = 'cd9f77'
+board_brown_zone_GUID = '8c09eb'
+board_gray_zone_GUID = '31bcb1'
+
+starter_toppings_one_GUID = 'd32c15'
+starter_toppings_two_GUID = '967cdf'
+starter_toppings_three_GUID = '686e89'
+starter_toppings_four_GUID = '6c0bbc'
+
+char_deck_GUID = '9aff8b'
+char_deck_zone_GUID = 'afd909'
+char_discard_zone_GUID = 'cd1326'
+
+
+--NEED TO ADD OTHER PLAYER ZONES AFTER GETTING THIS TO WORK FROM GLOBAL
+
+player_one_drawPile_GUID = 'c0cdd0'
+player_one_discardPile_GUID = '7e0756'
+
+player_two_drawPile_GUID = '2c0d21'
+player_two_discardPile_GUID = '5053ae'
+
+player_three_drawPile_GUID = '51b9d5'
+player_three_discardPile_GUID = 'e25106'
+
+player_four_drawPile_GUID = '3cfb97'
+player_four_discardPile_GUID = 'e2b2c9'
+
+
+--PLAYER HAND COUNTERS
+player_one_hand_counter_GUID = 'ad0f06'
+player_two_hand_counter_GUID = '206f31'
+player_three_hand_counter_GUID = '7b8e8a'
+player_four_hand_counter_GUID = '6522b8'
+
+--FEEDING ZONE STUFF
+feeding_zone_GUID = 'dbfc63'
+
+--ALL ZONES FOR THE PLAYERS MEEPLES TO GO TO TRIGGER EVENTS
+zone_pantry_GUID = '8fa247'
+zone_warrior_guild_GUID = '76a18a'
+zone_druid_guild_GUID = '1f2aab'
+zone_rogue_guild_GUID = '606039'
+zone_wizard_guild_GUID = '283ec7'
+zone_bard_guild_GUID = '5bc37b'
+zone_busser_GUID = 'b298a6'
+
+--THISE ARE FOR IF THE PLAYER IS USING THE PANTRY OR NOT
+player_one_pantry = false
+player_two_pantry = false
+player_three_pantry = false
+player_four_pantry = false
+
+--STUFF FOR THE BEASTS
+beast_deck_GUID = 'b4244f'
+beast_tracker_GUID = '61b5f9'
+beast_discard_GUID = '5b34f8'
+current_tracker_index = 6
+dead_beasts = {}
+
+--WILL COME INTO PLAY LATER
+numberOfPlayers = 1
+ouchyBurns = 0
+
+--THE OTHER DECKS (FOR SHUFFLING)
+prem_topping_deck_GUID = '8c1b8c'
+loot_deck_GUID = '2031f7'
+
+rune_deck_GUID = '235a98'
+rune_zone_GUID = '16ee2e'
+
+PlayerBoardLoc = {}
+globalShuffleZones = {}
+
+
+function onLoad(saved_data)
+    print("GOT HERE 1")
+    specialSauce = 0
+    toppingsPlaced = {}
+
+    Game_Board = getObjectFromGUID(game_board_GUID)
+    Dig_Clock = getObjectFromGUID(digital_clock_GUID)
+
+
+    Beast_Life_Tracker = getObjectFromGUID(beast_life_tracker_GUID)
+
+    beastTrackUp = {
+        click_function = "moveBeastTrackerUp",
+        function_owner = self,
+        label          = "",
+        position       = {-1.9,0.1,0.0},
+        width          = 900, height = 900,
+        font_size      = 20,
+        tooltip        = "Move Tracker Up",
+    }
+
+    beastTrackDown = {
+        click_function = "moveBeastTrackerDown",
+        function_owner = self,
+        label          = "",
+        position       = {0.0,0.1,0.0},
+        width          = 900, height = 900,
+        font_size      = 20,
+        tooltip        = "Move Tracker Down",
+    }
+
+    beastReset = {
+        click_function = "ResetBeastTracker",
+        function_owner = self,
+        label          = "",
+        position       = {1.9,0.1,0.0},
+        width          = 900, height = 900,
+        font_size      = 20,
+        tooltip        = "Reset Beast",
+    }
+
+
+    Beast_Life_Tracker.createButton(beastTrackUp)
+    Beast_Life_Tracker.createButton(beastTrackDown)
+    Beast_Life_Tracker.createButton(beastReset)
+
+    Premium_Topping_Deck = getObjectFromGUID(prem_topping_deck_GUID)
+    Loot_Deck = getObjectFromGUID(loot_deck_GUID)
+    Quest_Deck = getObjectFromGUID(quest_deck_GUID)
+    Rune_Deck = getObjectFromGUID(rune_deck_GUID)
+    Rune_Zone = getObjectFromGUID(rune_zone_GUID)
+
+    PlayerBoardLoc = {
+        One = {18.04, 0.96, -5.45},
+        Two = {-18.04, 0.96, -5.45},
+        Three = {-18.04, 0.96, 5.45},
+        Four = {18.04, 0.96, 5.45},
+    }
+
+    Beast_Deck = getObjectFromGUID(beast_deck_GUID)
+    Beast_Tracker = getObjectFromGUID(beast_tracker_GUID)
+    Beast_Discard = getObjectFromGUID(beast_discard_GUID)
+    Beast_Tracker.use_snap_points = false
+
+    print("GOT HERE 2")
+    --TABLE OF ALL THE BEASTS AND THEIR WEEKNESSES AND THEIR TOUGHNESSES (MIGHT ADD REWARDS LATER TO BE SPAWNED BASED ON CURRENT PLAYER)
+    beastDeckTable = {
+        {beastname = "Dragon", weak1 = "Human", weak2 = "Warrior", toughness = {t1 = 20, t2 = 18, t3 = 17, t4 = 15, t5 = 11, t6 = 10}},
+        {beastname = "Burgholder", weak1 = "Dwarf", weak2 = "Bard", toughness = {t1 = 18, t2 = 15, t3 = 12, t4 = 10, t5 = 8, t6 = 7}},
+        {beastname = "Ketchup Ooze", weak1 = "Elf", weak2 = "Druid", toughness = {t1 = 18, t2 = 17, t3 = 10, t4 = 9, t5 = 8, t6 = 6}},
+        {beastname = "Milkshake Golem", weak1 = "Orc", weak2 = "Wizard", toughness = {t1 = 18, t2 = 16, t3 = 10, t4 = 8, t5 = 7, t6 = 4}},
+        {beastname = "Frymera", weak1 = "Gnome", weak2 = "Rogue", toughness = {t1 = 16, t2 = 16, t3 = 16, t4 = 7, t5 = 7, t6 = 7}},
+        {beastname = "Mind Filet-Er", weak1 = "Human", weak2 = "Bard", toughness = {t1 = 15, t2 = 15, t3 = 11, t4 = 11, t5 = 6, t6 = 6}},
+        {beastname = "Pienotaur", weak1 = "Dwarf", weak2 = "Druid", toughness = {t1 = 15, t2 = 15, t3 = 15, t4 = 12, t5 = 12, t6 = 6}},
+        {beastname = "The Troll", weak1 = "Elf", weak2 = "Wizard", toughness = {t1 = 15, t2 = 15, t3 = 15, t4 = 15, t5 = 15, t6 = 5}},
+        {beastname = "Meal Mimic", weak1 = "Orc", weak2 = "Rogue", toughness = {t1 = 12, t2 = 12, t3 = 12, t4 = 6, t5 = 6, t6 = 6}},
+        {beastname = "Mis-ter-chief", weak1 = "Gnome", weak2 = "Warrior", toughness = {t1 = 12, t2 = 12, t3 = 10, t4 = 10, t5 = 5, t6 = 5}},
+        {beastname = "Broosss Leeee", weak1 = "Human", weak2 = "Druid", toughness = {t1 = 12, t2 = 12, t3 = 12, t4 = 8, t5 = 8, t6 = 4}},
+        {beastname = "Zombeef", weak1 = "Dwarf", weak2 = "Wizard", toughness = {t1 = 12, t2 = 12, t3 = 12, t4 = 12, t5 = 12, t6 = 4}},
+        {beastname = "Wraith Wrap", weak1 = "Elf", weak2 = "Rogue", toughness = {t1 = 10, t2 = 9, t3 = 9, t4 = 7, t5 = 7, t6 = 7}},
+        {beastname = "ColaKobold", weak1 = "Orc", weak2 = "Warrior", toughness = {t1 = 10, t2 = 10, t3 = 10, t4 = 5, t5 = 5, t6 = 5}},
+        {beastname = "Strawleton", weak1 = "Gnome", weak2 = "Bard", toughness = {t1 = 10, t2 = 10, t3 = 8, t4 = 8, t5 = 4, t6 = 4}},
+        {beastname = "Red", weak1 = "Human", weak2 = "Wizard", toughness = {t1 = 8, t2 = 6, t3 = 6, t4 = 5, t5 = 5, t6 = 5}},
+        {beastname = "Green", weak1 = "Dwarf", weak2 = "Rogue", toughness = {t1 = 8, t2 = 6, t3 = 6, t4 = 5, t5 = 5, t6 = 5}},
+        {beastname = "Blue", weak1 = "Elf", weak2 = "Warrior", toughness = {t1 = 8, t2 = 6, t3 = 6, t4 = 5, t5 = 5, t6 = 5}},
+        {beastname = "The Angry Pickle!", weak1 = "Orc", weak2 = "Bard", toughness = {t1 = 8, t2 = 8, t3 = 2, t4 = 2, t5 = 2, t6 = 2}},
+        {beastname = "Carl T. Hulu", weak1 = "Gnome", weak2 = "Druid", toughness = {t1 = 3, t2 = 3, t3 = 3, t4 = 3, t5 = 3, t6 = 3}},
+    }
+
+    print("GOT HERE 3")
+    --TABLE OF ALL CHARACTER CARDS AND THEIR NEEDS
+
+    charDeckTable = {
+        --HUMANS
+        {cardname = "H1", race = "Human", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Orange", n3 = "Green", n4 = "White", n5 = "Brown"}},
+        {cardname = "H2", race = "Human", guild = "Bard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Green", n3 = "Brown"}},
+        {cardname = "H3", race = "Human", guild = "Druid", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Orange", n3 = "Green", n4 = "White"}},
+        {cardname = "H4", race = "Human", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Orange", n3 = "Purple"}},
+        {cardname = "H5", race = "Human", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Green", n2 = "Orange", n3 = "Purple", n4 = "White"}},
+        {cardname = "H6", race = "Human", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Orange", n3 = "Green", n4 = "White", n5 = "Purple"}},
+        {cardname = "H7", race = "Human", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Green", n3 = "Purple", n4 = "Brown"}},
+        {cardname = "H8", race = "Human", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Brown", n3 = "White"}},
+        {cardname = "H9", race = "Human", guild = "Bard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Brown", n3 = "White"}},
+        {cardname = "H10", race = "Human", guild = "Druid", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Purple", n3 = "Brown", n4 = "White"}},
+        {cardname = "H11", race = "Human", guild = "Druid", type = "Character", diceNeeds = {n1 = "Orange", n2 = "Green", n3 = "Purple", n4 = "Brown"}},
+        {cardname = "H12", race = "Human", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Orange", n2 = "Green", n3 = "Purple"}},
+        {cardname = "H13", race = "Human", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Orange", n2 = "Green", n3 = "Brown", n4 = "White"}},
+        {cardname = "H14", race = "Human", guild = "Bard", type = "Character", diceNeeds = {n1 = "Orange", n2 = "Purple", n3 = "White"}},
+        {cardname = "H15", race = "Human", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Green", n2 = "Purple", n3 = "Brown", n4 = "White", n5 = "Orange"}},
+
+        --DWARVES
+        {cardname = "D1", race = "Dwarf", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Blue", n4 = "Brown", n5 = "Black"}},
+        {cardname = "D2", race = "Dwarf", guild = "Bard", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Blue"}},
+        {cardname = "D3", race = "Dwarf", guild = "Druid", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Blue", n4 = "White"}},
+        {cardname = "D4", race = "Dwarf", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Black"}},
+        {cardname = "D5", race = "Dwarf", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Brown", n4 = "White"}},
+        {cardname = "D6", race = "Dwarf", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Brown", n4 = "Black", n5 = "White"}},
+        {cardname = "D7", race = "Dwarf", guild = "Druid", type = "Character", diceNeeds = {n1 = "Red", n2 = "Blue", n3 = "Brown", n4 = "Black"}},
+        {cardname = "D8", race = "Dwarf", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Blue", n2 = "Brown", n3 = "White"}},
+        {cardname = "D9", race = "Dwarf", guild = "Bard", type = "Character", diceNeeds = {n1 = "Red", n2 = "Blue", n3 = "White"}},
+        {cardname = "D10", race = "Dwarf", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Red", n2 = "Brown", n3 = "Black", n4 = "White"}},
+        {cardname = "D11", race = "Dwarf", guild = "Druid", type = "Character", diceNeeds = {n1 = "Orange", n2 = "Blue", n3 = "Brown", n4 = "Black"}},
+        {cardname = "D12", race = "Dwarf", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Orange", n2 = "Brown", n3 = "White"}},
+        {cardname = "D13", race = "Dwarf", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Orange", n2 = "Blue", n3 = "Black", n4 = "White"}},
+        {cardname = "D14", race = "Dwarf", guild = "Bard", type = "Character", diceNeeds = {n1 = "Brown", n2 = "Black", n3 = "White"}},
+        {cardname = "D15", race = "Dwarf", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Red", n2 = "White", n3 = "Blue", n4 = "Brown", n5 = "Black"}},
+
+        --ELVES
+        {cardname = "E1", race = "Elf", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Yellow", n3 = "Green", n4 = "Blue", n5 = "Purple"}},
+        {cardname = "E2", race = "Elf", guild = "Bard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Yellow", n3 = "Green"}},
+        {cardname = "E3", race = "Elf", guild = "Druid", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Yellow", n3 = "Green", n4 = "White"}},
+        {cardname = "E4", race = "Elf", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Yellow", n3 = "Purple"}},
+        {cardname = "E5", race = "Elf", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Yellow", n3 = "Blue", n4 = "White"}},
+        {cardname = "E6", race = "Elf", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Yellow", n3 = "Purple", n4 = "White", n5 = "Blue"}},
+        {cardname = "E7", race = "Elf", guild = "Druid", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Green", n3 = "Blue", n4 = "Purple"}},
+        {cardname = "E8", race = "Elf", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Green", n3 = "Blue"}},
+        {cardname = "E9", race = "Elf", guild = "Bard", type = "Character", diceNeeds = {n1 = "Green", n2 = "Purple", n3 = "White"}},
+        {cardname = "E10", race = "Elf", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Blue", n3 = "Purple", n4 = "White"}},
+        {cardname = "E11", race = "Elf", guild = "Druid", type = "Character", diceNeeds = {n1 = "Yellow", n2 = "Green", n3 = "Purple", n4 = "Blue"}},
+        {cardname = "E12", race = "Elf", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Yellow", n2 = "Blue", n3 = "White"}},
+        {cardname = "E13", race = "Elf", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Yellow", n2 = "Green", n3 = "Purple", n4 = "White"}},
+        {cardname = "E14", race = "Elf", guild = "Bard", type = "Character", diceNeeds = {n1 = "Blue", n2 = "Purple", n3 = "White"}},
+        {cardname = "E15", race = "Elf", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Green", n2 = "Blue", n3 = "Purple", n4 = "White", n5 = "Pink"}},
+
+        --ORCS
+        {cardname = "O1", race = "Orc", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Red", n3 = "Yellow", n4 = "Blue", n5 = "Purple"}},
+        {cardname = "O2", race = "Orc", guild = "Bard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Red", n3 = "Yellow"}},
+        {cardname = "O3", race = "Orc", guild = "Druid", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Red", n3 = "Yellow", n4 = "Black"}},
+        {cardname = "O4", race = "Orc", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Red", n3 = "Purple"}},
+        {cardname = "O5", race = "Orc", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Red", n3 = "Blue", n4 = "Black"}},
+        {cardname = "O6", race = "Orc", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Red", n3 = "Black", n4 = "Blue", n5 = "Purple"}},
+        {cardname = "O7", race = "Orc", guild = "Druid", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Purple", n3 = "Yellow", n4 = "Blue"}},
+        {cardname = "O8", race = "Orc", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Black", n2 = "Blue", n3 = "Yellow"}},
+        {cardname = "O9", race = "Orc", guild = "Bard", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Purple", n3 = "Yellow"}},
+        {cardname = "O10", race = "Orc", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Purple", n3 = "Black", n4 = "Blue"}},
+        {cardname = "O11", race = "Orc", guild = "Druid", type = "Character", diceNeeds = {n1 = "Red", n2 = "Yellow", n3 = "Purple", n4 = "Blue"}},
+        {cardname = "O12", race = "Orc", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Red", n2 = "Blue", n3 = "Black"}},
+        {cardname = "O13", race = "Orc", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Red", n2 = "Yellow", n3 = "Purple", n4 = "Black"}},
+        {cardname = "O14", race = "Orc", guild = "Bard", type = "Character", diceNeeds = {n1 = "Blue", n2 = "Purple", n3 = "Black"}},
+        {cardname = "O15", race = "Orc", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Pink", n2 = "Yellow", n3 = "Black", n4 = "Blue", n5 = "Purple"}},
+
+        --GNOMES
+        {cardname = "G1", race = "Gnome", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Yellow", n4 = "Green", n5 = "Brown"}},
+        {cardname = "G2", race = "Gnome", guild = "Bard", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Yellow"}},
+        {cardname = "G3", race = "Gnome", guild = "Druid", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Yellow", n4 = "Black"}},
+        {cardname = "G4", race = "Gnome", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Brown"}},
+        {cardname = "G5", race = "Gnome", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Black", n4 = "Green"}},
+        {cardname = "G6", race = "Gnome", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Red", n2 = "Orange", n3 = "Yellow", n4 = "Black", n5 = "Brown"}},
+        {cardname = "G7", race = "Gnome", guild = "Druid", type = "Character", diceNeeds = {n1 = "Red", n2 = "Brown", n3 = "Yellow", n4 = "Green"}},
+        {cardname = "G8", race = "Gnome", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Red", n2 = "Green", n3 = "Black"}},
+        {cardname = "G9", race = "Gnome", guild = "Bard", type = "Character", diceNeeds = {n1 = "Brown", n2 = "Black", n3 = "Yellow"}},
+        {cardname = "G10", race = "Gnome", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Red", n2 = "Brown", n3 = "Black", n4 = "Green"}},
+        {cardname = "G11", race = "Gnome", guild = "Druid", type = "Character", diceNeeds = {n1 = "Brown", n2 = "Orange", n3 = "Yellow", n4 = "Green"}},
+        {cardname = "G12", race = "Gnome", guild = "Wizard", type = "Character", diceNeeds = {n1 = "Black", n2 = "Green", n3 = "Yellow"}},
+        {cardname = "G13", race = "Gnome", guild = "Rogue", type = "Character", diceNeeds = {n1 = "Brown", n2 = "Orange", n3 = "Yellow", n4 = "Black"}},
+        {cardname = "G14", race = "Gnome", guild = "Bard", type = "Character", diceNeeds = {n1 = "Black", n2 = "Orange", n3 = "Green"}},
+        {cardname = "G15", race = "Gnome", guild = "Warrior", type = "Character", diceNeeds = {n1 = "Black", n2 = "Orange", n3 = "Yellow", n4 = "Green", n5 = "Brown"}},
+    }
+
+
+    print("GOT HERE 4")
+
+    --SET RED DICE AND THEIR SIDE VALUES
+    Dice_Red = getObjectFromGUID(dice_red_GUID)
+    Dice_Red.setRotationValues({
+        {value="3", rotation={x=-90, y=0, z=0}},
+        {value="3", rotation={x=0, y=0, z=0}},
+        {value="2", rotation={x=0, y=0, z=-90}},
+        {value="2", rotation={x=0, y=0, z=90}},
+        {value="1", rotation={x=0, y=0, z=-180}},
+        {value="1", rotation={x=90, y=0, z=0}},
+    })
+
+    --SET GREEN DICE AND THEIR SIDE VALUES
+    Dice_Green = getObjectFromGUID(dice_green_GUID)
+    Dice_Green.setRotationValues({
+        {value="5", rotation={x=-90, y=0, z=0}},
+        {value="4", rotation={x=0, y=0, z=0}},
+        {value="3", rotation={x=0, y=0, z=-90}},
+        {value="2", rotation={x=0, y=0, z=90}},
+        {value="1", rotation={x=0, y=0, z=-180}},
+        {value="0", rotation={x=90, y=0, z=0}},
+    })
+
+    --SET WHITE DICE AND THEIR SIDE VALUES
+    Dice_White = getObjectFromGUID(dice_white_GUID)
+    Dice_White.setRotationValues({
+        {value="2", rotation={x=-90, y=0, z=0}},
+        {value="2", rotation={x=0, y=0, z=0}},
+        {value="2", rotation={x=0, y=0, z=-90}},
+        {value="1", rotation={x=0, y=0, z=90}},
+        {value="1", rotation={x=0, y=0, z=-180}},
+        {value="1", rotation={x=90, y=0, z=0}},
+    })
+
+    --SET BLUE DICE AND THEIR SIDE VALUES
+    Dice_Blue = getObjectFromGUID(dice_blue_GUID)
+    Dice_Blue.setRotationValues({
+        {value="f", rotation={x=-90, y=0, z=0}},
+        {value="f", rotation={x=0, y=0, z=0}},
+        {value="rr", rotation={x=0, y=0, z=-90}},
+        {value="rr", rotation={x=0, y=0, z=90}},
+        {value="0", rotation={x=0, y=0, z=-180}},
+        {value="0", rotation={x=90, y=0, z=0}},
+    })
+
+    --SET BLACK DICE AND THEIR SIDE VALUES
+    Dice_Black = getObjectFromGUID(dice_black_GUID)
+    Dice_Black.setRotationValues({
+        {value="4", rotation={x=-90, y=0, z=0}},
+        {value="4", rotation={x=0, y=0, z=0}},
+        {value="1", rotation={x=0, y=0, z=-90}},
+        {value="1", rotation={x=0, y=0, z=90}},
+        {value="1", rotation={x=0, y=0, z=-180}},
+        {value="1", rotation={x=90, y=0, z=0}},
+    })
+
+    --SET PURPLE DICE AND THEIR SIDE VALUES
+    Dice_Purple = getObjectFromGUID(dice_purple_GUID)
+    Dice_Purple.setRotationValues({
+        {value="5", rotation={x=-90, y=0, z=0}},
+        {value="4", rotation={x=0, y=0, z=0}},
+        {value="4", rotation={x=0, y=0, z=-90}},
+        {value="2", rotation={x=0, y=0, z=90}},
+        {value="2", rotation={x=0, y=0, z=-180}},
+        {value="-2", rotation={x=90, y=0, z=0}},
+    })
+
+    print("GOT HERE 5")
+
+    Potion_Red = getObjectFromGUID(potion_red_GUID)
+    Potion_Green = getObjectFromGUID(potion_green_GUID)
+    Potion_Blue = getObjectFromGUID(potion_blue_GUID)
+
+    --PLAYER HAND COUNTERS
+    Player_One_Hand_Counter = getObjectFromGUID(player_one_hand_counter_GUID)
+    Player_Two_Hand_Counter = getObjectFromGUID(player_two_hand_counter_GUID)
+    Player_Three_Hand_Counter = getObjectFromGUID(player_three_hand_counter_GUID)
+    Player_Four_Hand_Counter = getObjectFromGUID(player_four_hand_counter_GUID)
+
+    --MEEPLE ZONES
+    Pantry_Zone = getObjectFromGUID(zone_pantry_GUID)
+    Warrior_Guild_Zone = getObjectFromGUID(zone_warrior_guild_GUID)
+    Druid_Guild_Zone = getObjectFromGUID(zone_druid_guild_GUID)
+    Rogue_Guild_Zone = getObjectFromGUID(zone_rogue_guild_GUID)
+    Wizard_Guild_Zone = getObjectFromGUID(zone_wizard_guild_GUID)
+    Bard_Guild_Zone = getObjectFromGUID(zone_bard_guild_GUID)
+    Busser_Zone = getObjectFromGUID(zone_busser_GUID)
+
+    Spatula = getObjectFromGUID(spatula_GUID)
+    Spatula.setName('First Turn Marker')
+
+    Player_One_Draw = getObjectFromGUID(player_one_drawPile_GUID)
+    Player_One_Discard = getObjectFromGUID(player_one_discardPile_GUID)
+
+    Player_Two_Draw = getObjectFromGUID(player_two_drawPile_GUID)
+    Player_Two_Discard = getObjectFromGUID(player_two_discardPile_GUID)
+
+    Player_Three_Draw = getObjectFromGUID(player_three_drawPile_GUID)
+    Player_Three_Discard = getObjectFromGUID(player_three_discardPile_GUID)
+
+    Player_Four_Draw = getObjectFromGUID(player_four_drawPile_GUID)
+    Player_Four_Discard = getObjectFromGUID(player_four_discardPile_GUID)
+
+
+    Board_Zone_Pink = getObjectFromGUID(board_pink_zone_GUID)
+    Board_Zone_Red = getObjectFromGUID(board_red_zone_GUID)
+    Board_Zone_Blue = getObjectFromGUID(board_blue_zone_GUID)
+    Board_Zone_Brown = getObjectFromGUID(board_brown_zone_GUID)
+    Board_Zone_Gray = getObjectFromGUID(board_gray_zone_GUID)
+
+    Board_Pink = getObjectFromGUID(pink_board_GUID)
+    Board_Red = getObjectFromGUID(red_board_GUID)
+    Board_Blue = getObjectFromGUID(blue_board_GUID)
+    Board_Brown = getObjectFromGUID(brown_board_GUID)
+    Board_Gray = getObjectFromGUID(gray_board_GUID)
+
+    Starter_Toppings_One = getObjectFromGUID(starter_toppings_one_GUID)
+    Starter_Toppings_Two = getObjectFromGUID(starter_toppings_two_GUID)
+    Starter_Toppings_Three = getObjectFromGUID(starter_toppings_three_GUID)
+    Starter_Toppings_Four = getObjectFromGUID(starter_toppings_four_GUID)
+
+    CharOneZone = getObjectFromGUID(char_location_one_GUID)
+    CharTwoZone = getObjectFromGUID(char_location_two_GUID)
+    CharThreeZone = getObjectFromGUID(char_location_three_GUID)
+    CharFourZone = getObjectFromGUID(char_location_four_GUID)
+    CharFiveZone = getObjectFromGUID(char_location_five_GUID)
+    Char_Deck = getObjectFromGUID(char_deck_GUID)
+    Char_Deck_Zone = getObjectFromGUID(char_deck_zone_GUID)
+    CharDiscardZone = getObjectFromGUID(char_discard_zone_GUID)
+
+    QuestDeck = getObjectFromGUID(quest_deck_GUID)
+    QuestZone = getObjectFromGUID(quest_zone_GUID)
+
+    FeedingZone = getObjectFromGUID(feeding_zone_GUID)
+
+    beastTrackerLocations = {
+        pos = {{-6.06, 1.61, 4.48}, {-6.06, 1.61, 5.00}, {-6.06, 1.61, 5.52}, {-6.06, 1.61, 6.03}, {-6.06, 1.61, 6.56}, {-6.06, 1.61, 7.08}}
+    }
+
+    Spatula.createButton({click_function = 'heatMessage', function_owner = nil , label = 'yummy', position = {0, 0.0, -1.8}, rotation = {0,0,0}, width = 1000, height = 1200, font_size = 100})
+
+
+    --THIS IS JUST HERE TO GET THE FIRST PLAYER SEATED IN THE GAME FOR SPAWNING
+    playerZoneInfo = {
+        {player = 'One',
+        drawPile = Player_One_Draw,
+        discardPile = Player_One_Discard,
+        spawnMod = {Player_One_Draw.getPosition()[1], 0.0, Player_One_Draw.getPosition()[3] - 8}},
+
+        {player = 'Two',
+        drawPile = Player_Two_Draw,
+        discardPile = Player_Two_Discard,
+        spawnMod = {Player_Two_Draw.getPosition()[1], 0.0, Player_Two_Draw.getPosition()[3] - 8}},  --THIS IS THE SPAW LOCATION FOR THE ITEMS NEEDED
+
+        {player = 'Three',
+        drawPile = Player_Three_Draw,
+        discardPile = Player_Three_Discard,
+        spawnMod = {Player_Three_Draw.getPosition()[1], 0.0, Player_Three_Draw.getPosition()[3] + 8}},
+
+        {player = 'Four',
+        drawPile = Player_Four_Draw,
+        discardPile = Player_Four_Discard,
+        spawnMod = {Player_Four_Draw.getPosition()[1], 0.0, Player_Four_Draw.getPosition()[3] + 8}}
+    }
+
+    --UI.setAttribute("mapSelection", "active", false)
+
+    table.insert(globalShuffleZones, Char_Deck)
+    table.insert(globalShuffleZones, Beast_Deck)
+    table.insert(globalShuffleZones, Premium_Topping_Deck)
+    table.insert(globalShuffleZones, Loot_Deck)
+    table.insert(globalShuffleZones, Rune_Deck)
+    table.insert(globalShuffleZones, Quest_Deck)
+
+    Timer.create({
+        identifier     = "startingShuffle",
+        function_name  = "shuffleTheseZones",
+        parameters     = globalShuffleZones,
+        delay          = 0.2,
+        repetitions    = 10,
+    })
+
+    --[[Timer.create({
+    identifier     = "startingfillzones",
+    function_name  = "startFillZones",
+    parameters     = globalShuffleZones,
+    delay          = 2.5,
+})]]--
+
+end
+
+function shuffleTheseZones(zones)
+    for i, v in ipairs(zones) do
+        v.shuffle()
+    end
+end
+
+function startFillZones ()
+    fillRuneZone()
+    fillQuestZone()
+end
+
+--[[function onPlayerTurnStart(player_color_start, player_color_previous)
+if player_color_start ~= nil then
+setCurrentColor({color = player_color_start})
+end
+
+fillQuestZone()
+fillRuneZone()
+end
+
+function setCurrentColor(paras)
+--print(paras.color)
+print("CURRENT PLAYER " .. paras.color)
+
+local pNumber = ''
+
+if paras.color == 'White' then
+pNumber = 'One'
+elseif paras.color == '' then
+return
+elseif paras.color == 'Red' then
+pNumber = 'Two'
+elseif paras.color == 'Green' then
+pNumber = 'Three'
+elseif paras.color == 'Blue' then
+pNumber = 'Four'
+end
+
+--print(pNumber)
+
+for a, b in pairs(playerZoneInfo) do
+print(a)
+print(b.player)
+if b.player == pNumber then
+currentPlayer = b.player
+currentDraw = b.drawPile
+currentDiscard = b.discardPile
+spawnModifierDice = b.spawnMod
+end
+end
+
+end
+]]--
+
+
+--ADD THIS FUNCTIONALITY FOR CHECKING TO DO END OF TURN CLEANUP ???
+function onObjectLeaveScriptingZone(zone, leave_object)
+    local name = leave_object.getName()
+
+    if zone == Pantry_Zone then
+        if name == 'One' then
+            player_one_pantry = false
+        elseif name == 'Two' then
+            player_two_pantry = false
+        elseif name == 'Three' then
+            player_three_pantry = false
+        elseif name == 'Four' then
+            player_four_pantry = false
+        end
+    end
+end
+
+function onObjectEnterScriptingZone(zone, enter_object)
+    local name = enter_object.getName()
+
+    if zone == Pantry_Zone then
+        if name == 'One' then
+            player_one_pantry = true
+        elseif name == 'Two' then
+            player_two_pantry = true
+        elseif name == 'Three' then
+            player_three_pantry = true
+        elseif name == 'Four' then
+            player_four_pantry = true
+        end
+    end
+
+
+    if zone == Busser_Zone then
+        if name == "One" or name == "Two" or name == "Three" or name == "Four" then
+            clearChars()
+
+            Timer.create({
+                identifier     = "doesntmatter3",
+                function_name  = "fillCharZones",
+                delay          = 0.5,
+            })
+        end
+    end
+end
+
+function moveWait(params)
+    shuffleArea(params.cDraw)
+end
+
+function shuffleArea(areaName)
+    local theCards = areaName.getObjects()
+
+    theCards[1].shuffle()
+end
+
+function getDice(parms)
+    local name = ""
+    specialSauce = 0
+    toppingsPlaced = {}
+    cardsOnBoard = 0
+    local player = parms.playerNumb
+
+    --THIS SECTION WILL BE FOR GETTING WHAT CARDS ARE ON THE PLAYER MAT
+    cards = FeedingZone.getObjects()
+
+    --THIS WILL BE HELPFUL TO SEE WHAT TOPPING ARE ON THE BOARD
+    print("FIRST")
+    print(cardsOnBoard)
+    for a, b in pairs(cards) do
+        local search = b.getName()
+        local charSearch = b.getDescription()
+
+        print("SECOND")
+        print(cardsOnBoard)
+        if b.getQuantity() > 1 then
+            local thisDeck = b.getObjects()
+            for i, v in ipairs(thisDeck) do
+                local search2 = v.nickname
+                --print(v.description)
+
+                if search2 == "Topping" then
+                    cardsOnBoard = cardsOnBoard + 1
+
+                    local matched = false
+                    for x, y in ipairs(toppingsPlaced) do
+
+                        if y == v.description then
+                            matched = true
+                        end
+                    end
+                    --print(matched)
+
+                    if matched == false then
+                        --print("Adding a card from a deck")
+                        --cardsOnBoard = cardsOnBoard + 1
+                        table.insert(toppingsPlaced, v.description)
+                    end
+                end
+            end
+        end
+
+        print("THIRD")
+        print(cardsOnBoard)
+        if search == "Topping" then
+
+
+            local matched = false
+            for x, y in ipairs(toppingsPlaced) do
+                if y == b.getDescription() then
+                    matched = true
+                end
+            end
+
+            if matched == false then
+                --print(b.getDescription())
+                --print("Found a non-matched topping")
+                table.insert(toppingsPlaced, b.getDescription())
+                cardsOnBoard = cardsOnBoard + 1
+            end
+        end
+        print(cardsOnBoard)
+
+        if charSearch == "Character" then
+            name = b.getName()
+        end
+    end
+
+    --WORKING HERE
+
+    for a,b in pairs(cards) do
+        print(cardsOnBoard)
+        local search = b.getName()
+
+        if b.getQuantity() > 1 then
+            local thisDeck = b.getObjects()
+            for i, v in ipairs(thisDeck) do
+                local search2 = v.nickname
+
+                if search2 == "Premium" then
+                    cardsOnBoard = cardsOnBoard + 1
+
+                    for w in string.gmatch(v.description, "%a+") do
+                        local matched = false
+                        for x, y in ipairs(toppingsPlaced) do
+                            if y == w then
+                                matched = true
+                            end
+                        end
+                        --print(matched)
+
+                        if matched == false then
+                            --cardsOnBoard = cardsOnBoard + 1
+                            --print("Adding a card from a deck")
+                            table.insert(toppingsPlaced, w)
+                        end
+                    end
+                end
+
+                if search2 == "Special Sauce" then
+                    specialSauce = specialSauce + 1
+                    cardsOnBoard = cardsOnBoard + 1
+                end
+            end
+        end
+
+        print(cardsOnBoard)
+        if search == "Premium" then
+            cardsOnBoard = cardsOnBoard + 1
+
+            for w in string.gmatch(b.getDescription(), "%a+") do
+                local matched = false
+                for x, y in ipairs(toppingsPlaced) do
+                    if y == w then
+                        matched = true
+                    end
+                end
+
+                if matched == false then
+                    --cardsOnBoard = cardsOnBoard + 1
+                    table.insert(toppingsPlaced, w)
+                end
+            end
+        end
+
+        print(cardsOnBoard)
+        if search == "Special Sauce" then
+            specialSauce = specialSauce + 1
+            cardsOnBoard = cardsOnBoard + 1
+        end
+    end
+
+    if name ~= "" then
+        if toppingsPlaced ~= "" then
+            nameNeeded = {needed = name} --this is a table to pass the name we need
+
+            -- needs is a table, guild is a string
+            needs = findCharNeeds(nameNeeded)
+            guild = findGuild(nameNeeded)
+            race = findRace(nameNeeded)
+
+            --print("HERE WE GO")
+            --print(race)
+            print(unpack(needs))
+            print(unpack(toppingsPlaced))
+            toppingList = {
+                itsNeeds = needs,
+                onBoard = toppingsPlaced,
+            }
+
+            diceSpawnParms = {
+                itsGuild = guild,
+                playerNumb = player,
+                amnt = amntMatchedToppings(toppingList),
+            }
+
+            if cardsOnBoard < diceSpawnParms.amnt then
+                diceSpawnParms.amnt = cardsOnBoard
+            end
+            --print(diceSpawnParms.amnt)
+            --if #cards - 2 < diceSpawnParms.amnt then
+            --    diceSpawnParms.amnt = #cards - 2
+            --end
+
+            spawnDice(diceSpawnParms)
+        end
+    else
+
+        guild = "NPC"
+        race = "None"
+
+        local thisMany = #toppingsPlaced + specialSauce
+
+        diceSpawnParms = {
+            itsGuild = guild,
+            playerNumb = player,
+            amnt = thisMany,
+            --amnt = cardsOnBoard,
+        }
+
+        --print(#toppingsPlaced)
+        --print(diceSpawnParms.amnt)
+
+        spawnDice(diceSpawnParms)
+
+
+    end
+
+    local currentB = Beast_Deck.getObjects()
+    local Bname = currentB[#currentB].nickname
+    local weakness1
+    local weakness2
+
+    for i, v in ipairs(beastDeckTable) do
+        if Bname == v.beastname then
+            weakness1 = v.weak1
+            weakness2 = v.weak2
+        end
+    end
+
+    if weakness1 == race or weakness2 == guild then
+        moveBeastTrackerDown()
+    end
+end
+
+function findRace(parms)
+    local cardIndex = 1
+    local foundCard = false
+
+    name = parms.needed --table that just contains name of char on player board that we are matching
+
+    while cardIndex < 76 and foundCard == false do
+        if charDeckTable[cardIndex]["cardname"] == name then
+            foundCard = true
+        else
+            cardIndex = cardIndex + 1
+        end
+    end
+
+    return charDeckTable[cardIndex]["race"]
+end
+
+function spawnPotion(parms)
+    local color = parms.thePotionColor
+    local amnt = parms.amnt
+    local player = parms.playerNumb
+    local posToSpawn
+
+    for i, v in ipairs(playerZoneInfo) do
+        if player == v.player then
+            posToSpawn = v.spawnMod
+        end
+    end
+
+    local i = 0
+
+    if color == "red" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Potion_Red.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+
+    elseif color == "green" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Potion_Green.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+
+    elseif color == "blue" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Potion_Blue.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+    end
+end
+-- WILL SPAWN A DICE OF A CHOSEN COLOR NEXT TO THE PLAYER WHO SELECTED IT
+function spawnDice(parms)
+
+    local guildName = parms.itsGuild
+    local amnt = parms.amnt
+    local player = parms.playerNumb
+    local posToSpawn
+
+    --posForSpawn = FeedingZone.getPosition()
+    --posForSpawn = {(posForSpawn[1] + spawnModifierDice[1]), (posForSpawn[2] + spawnModifierDice[2]), (posForSpawn[3] + spawnModifierDice[3])}
+    --posForSpawn = spawnModifierDice
+    for i, v in ipairs(playerZoneInfo) do
+        if player == v.player then
+            posToSpawn = v.spawnMod
+        end
+    end
+
+    local i = 0
+
+    if guildName == "Druid" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Dice_Green.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+
+    elseif guildName == "Wizard" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Dice_Purple.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+
+    elseif guildName == "Warrior" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Dice_Red.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+
+    elseif guildName == "Bard" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Dice_Blue.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+
+    elseif guildName == "Rogue" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Dice_Black.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+
+    elseif guildName == "NPC" then
+        if amnt ~= 0 then
+            while i < amnt do
+                Dice_White.clone({
+                    position = {(posToSpawn[1] + math.random(1, 2)), (posToSpawn[2] + math.random(1, 2)), (posToSpawn[3] + math.random(1, 2))},
+                    snap_to_grid = false,-- boolean [false],
+                })
+                i = i + 1
+            end
+        end
+        i = 0
+
+    end
+end
+
+function findGuild(charName)
+    local cardIndex = 1
+    local foundCard = false
+
+    name = charName.needed --table that just contains name of char on player board that we are matching
+
+    --print(name)
+
+    while cardIndex < 76 and foundCard == false do
+        if charDeckTable[cardIndex]["cardname"] == name then
+            foundCard = true
+        else
+            cardIndex = cardIndex + 1
+        end
+    end
+
+    return charDeckTable[cardIndex]["guild"]
+end
+
+function findCharNeeds(charName)
+    local cardIndex = 1
+    local foundCard = false
+
+    name = charName.needed --table that just contains name of char on player board that we are matching
+
+    while cardIndex < 76 and foundCard == false do
+        if charDeckTable[cardIndex]["cardname"] == name then
+            foundCard = true
+        else
+            cardIndex = cardIndex + 1
+        end
+    end
+
+    needs = {
+        charDeckTable[cardIndex]["diceNeeds"].n1,
+        charDeckTable[cardIndex]["diceNeeds"].n2,
+        charDeckTable[cardIndex]["diceNeeds"].n3,
+        charDeckTable[cardIndex]["diceNeeds"].n4,
+        charDeckTable[cardIndex]["diceNeeds"].n5
+    }
+
+    return needs
+end
+
+function amntMatchedToppings(toppings)
+    local matched = 0
+
+    T_Needs = toppings.itsNeeds
+    T_Board = toppings.onBoard
+    T_AlreadyMatched = {}
+
+    for i, v in ipairs(T_Needs) do
+        --currentTopping = v
+        --print(currentTopping)
+        for x, y in ipairs(T_Board) do
+            if y == v then
+                matched = matched + 1
+            end
+        end
+        --[[for i = 1, #T_Board do
+            boardTopping = T_Board[i]
+
+            if boardTopping == currentTopping then
+                matched = matched + 1
+            end
+
+        end]]--
+    end
+
+    print(matched + specialSauce)
+    return matched + specialSauce
+end
+
+function discardAndDraw(parms)
+    --UI.setAttribute("mapSelection", "active", false)
+    fillCharZones()
+    local cardsToMove = FeedingZone.getObjects()
+    local curPlayer = parms.playerNumb
+    local curDiscard
+    local curDraw
+
+    if curPlayer == "One" then
+        curDiscard = playerZoneInfo[1].discardPile
+        curDraw = playerZoneInfo[1].drawPile
+    elseif curPlayer == "Two" then
+        curDiscard = playerZoneInfo[2].discardPile
+        curDraw = playerZoneInfo[2].drawPile
+    elseif curPlayer == "Three" then
+        curDiscard = playerZoneInfo[3].discardPile
+        curDraw = playerZoneInfo[3].drawPile
+    elseif curPlayer == "Four" then
+        curDiscard = playerZoneInfo[4].discardPile
+        curDraw = playerZoneInfo[4].drawPile
+    end
+
+
+
+    dTable = {cDraw = curDraw, cPlayer = curPlayer, cDiscard = curDiscard}
+
+    --THIS WILL BE HELPFUL TO SEE WHAT TOPPING ARE ON THE BOARD (GETTING TOO MANY NAME CURRENTLY)
+    for a,b in pairs(cardsToMove) do
+        local search = b.getName()
+        local descriptionSearch = b.getDescription()
+        if search == "Topping" then
+            b.setPosition(curDiscard.getPosition())
+        elseif search == "Premium" then
+            b.setPosition(curDiscard.getPosition())
+        elseif search == "Special Sauce" then
+            b.setPosition(curDiscard.getPosition())
+        elseif descriptionSearch == "Character" then
+            b.setPosition(CharDiscardZone.getPosition())
+        elseif b.getQuantity() > 1 then
+            b.setPosition(curDiscard.getPosition())
+        end
+    end
+
+    --CHECK TO SEE IF THE CORRECT PLAYER IS IN THE PANTRY ON THEIR TURN SO WE DON MESS THINGS UP ON OTHER PLAYERS TURNS
+    if player_one_pantry == true and curPlayer == "One" then
+        Timer.create({
+            identifier = "pantrywait",
+            function_name = "pantryWait",
+            parameters     = dTable,
+            delay = 0.6,
+        })
+    elseif player_two_pantry == true and curPlayer == "Two" then
+        Timer.create({
+            identifier = "pantrywait",
+            function_name = "pantryWait",
+            parameters     = dTable,
+            delay = 0.6,
+        })
+    elseif player_three_pantry == true and curPlayer == "Three" then
+        Timer.create({
+            identifier = "pantrywait",
+            function_name = "pantryWait",
+            parameters     = dTable,
+            delay = 0.6,
+        })
+    elseif player_four_pantry == true and curPlayer == "Four" then
+        Timer.create({
+            identifier = "pantrywait",
+            function_name = "pantryWait",
+            parameters     = dTable,
+            delay = 0.6,
+        })
+        --THIS IS WHEN THERE IS NO PLAYER IN THE PANTRY
+    else
+        Timer.create({
+            identifier = "restofdnd",
+            function_name = "restOfDiscardDraw",
+            parameters     = dTable,
+            delay = 0.6,
+        })
+    end
+end
+
+function pantryWait(dTable)
+    local toMove = dTable.cDiscard.getObjects()
+    if toMove[1] ~= nil then
+        toMove[1].flip()
+
+        for a,b in pairs(toMove) do
+            b.setPosition(dTable.cDraw.getPosition())
+        end
+
+        --THIS IS TO GET IT TO WAIT BEFORE IT TRIEDS TO SHUFFLE
+
+        Timer.create({
+            identifier     = "doesntmatter1",
+            function_name  = "moveWait",
+            parameters     = dTable,
+            delay          = 1,
+            repetitions    = 2,
+        })
+        Timer.create({
+            identifier     = "doesntmatter2",
+            function_name  = "restOfDiscardDraw",
+            parameters     = dTable,
+            delay          = 2.5,
+        })
+    end
+end
+
+function restOfDiscardDraw(dTable)
+    local deckZone = dTable.cDraw.getObjects()
+    local deck = deckZone[1]
+    local playerHand
+    local handSize
+    local curPlayer = dTable.cPlayer
+
+    if curPlayer == "Two" then
+        playerHand = Player.Red.getHandObjects(1)
+        handSize = Player_Two_Hand_Counter.getValue()
+    elseif curPlayer == "One" then
+        playerHand = Player.White.getHandObjects(1)
+        handSize = Player_One_Hand_Counter.getValue()
+    elseif curPlayer == "Three" then
+        playerHand = Player.Green.getHandObjects(1)
+        handSize = Player_Three_Hand_Counter.getValue()
+    elseif curPlayer == "Four" then
+        playerHand = Player.Blue.getHandObjects(1)
+        handSize = Player_Four_Hand_Counter.getValue()
+    end
+    --print(playerHand[1].getName())
+
+
+    local amntInHand = 0
+
+    for a,b in pairs(playerHand) do
+        local searchHand = b.getName()
+
+        if searchHand == "Topping" then
+            amntInHand = amntInHand + 1
+        elseif searchHand == "Premium" then
+            amntInHand = amntInHand + 1
+        elseif searchHand == "Special Sauce" then
+            amntInHand = amntInHand + 1
+        end
+    end
+    if curPlayer == "One" then
+        if deck ~= nil then
+            local amntInDeck = deck.getQuantity()
+            --print(amntInDeck)
+            if amntInDeck >= 1 then
+                deck.dealToColor(handSize - amntInHand, "White")
+            elseif amntInDeck == -1 and amntInHand < 5 then
+                deck.dealToColor(1, "White")
+            end
+        end
+    elseif curPlayer == "Two" then
+        if deck ~= nil then
+            local amntInDeck = deck.getQuantity()
+            --print(amntInDeck)
+            if amntInDeck >= 1 then
+                deck.dealToColor(handSize - amntInHand, "Red")
+            elseif amntInDeck == -1 and amntInHand < 5 then
+                deck.dealToColor(1, "Red")
+            end
+        end
+    elseif curPlayer == "Three" then
+        if deck ~= nil then
+            local amntInDeck = deck.getQuantity()
+            --print(amntInDeck)
+            if amntInDeck >= 1 then
+                deck.dealToColor(handSize - amntInHand, "Green")
+            elseif amntInDeck == -1 and amntInHand < 5 then
+                deck.dealToColor(1, "Green")
+            end
+        end
+    elseif curPlayer == "Four" then
+        if deck ~= nil then
+            local amntInDeck = deck.getQuantity()
+            --print(amntInDeck)
+            if amntInDeck >= 1 then
+                deck.dealToColor(handSize - amntInHand, "Blue")
+            elseif amntInDeck == -1 and amntInHand < 5 then
+                deck.dealToColor(1, "Blue")
+            end
+        end
+    end
+end
+
+
+
+function moveBeastTrackerUp()
+    current_tracker_index = current_tracker_index + 1
+
+    local newPos = beastTrackerLocations["pos"][current_tracker_index]
+    if current_tracker_index >= 6 then
+        current_tracker_index = 6
+        broadcastToAll("BEAST AT LEVEL " .. current_tracker_index, {255/255, 66/255, 0/255})
+        newPos = beastTrackerLocations["pos"][current_tracker_index]
+        Beast_Tracker.setPosition(newPos)
+    elseif current_tracker_index > 4 then
+        broadcastToAll("BEAST AT LEVEL " .. current_tracker_index, {255/255, 66/255, 0/255})
+        Beast_Tracker.setColorTint({255/255, 66/255, 0/255})
+        Beast_Tracker.setPosition(newPos)
+    elseif current_tracker_index > 2 then
+        broadcastToAll("BEAST AT LEVEL " .. current_tracker_index, {235/255, 221/255, 51/255})
+        Beast_Tracker.setColorTint({235/255, 221/255, 51/255})
+        Beast_Tracker.setPosition(newPos)
+    elseif current_tracker_index > 0 then
+        broadcastToAll("BEAST AT LEVEL " .. current_tracker_index, {243/255, 243/255, 243/255})
+        Beast_Tracker.setColorTint({243/255, 243/255, 243/255})
+        Beast_Tracker.setPosition(newPos)
+        --[[elseif current_tracker_index == 0 then
+        broadcastToAll("BEAST HAS YEILDED", {255/255, 0/255, 0/255})
+        Beast_Tracker.setColorTint({255/255, 66/255, 0/255})
+
+        current_tracker_index = 6
+        newPos = beastTrackerLocations["pos"][current_tracker_index]
+        Beast_Tracker.setPosition(newPos)
+
+        local theBeastDeck = Beast_Deck.getObjects()
+        local strName = theBeastDeck[#theBeastDeck - 1].nickname
+
+        broadcastToAll(strName .. " has arrived.", {21/255, 203/255, 44/255})
+
+        takeParams = {
+        position = Beast_Discard.getPosition(),
+        top = true,
+    }
+
+    Beast_Deck.takeObject(takeParams)
+    ]]--
+end
+end
+
+function moveBeastTrackerDown()
+    --print("Moving Beast Tracker")
+
+    current_tracker_index = current_tracker_index - 1
+
+
+
+    local newPos = beastTrackerLocations["pos"][current_tracker_index]
+
+    if current_tracker_index > 4 then
+        broadcastToAll("BEAST AT LEVEL " .. current_tracker_index, {255/255, 66/255, 0/255})
+        Beast_Tracker.setColorTint({255/255, 66/255, 0/255})
+        Beast_Tracker.setPosition(newPos)
+    elseif current_tracker_index > 2 then
+        broadcastToAll("BEAST AT LEVEL " .. current_tracker_index, {235/255, 221/255, 51/255})
+        Beast_Tracker.setColorTint({235/255, 221/255, 51/255})
+        Beast_Tracker.setPosition(newPos)
+    elseif current_tracker_index > 0 then
+        broadcastToAll("BEAST AT LEVEL " .. current_tracker_index, {243/255, 243/255, 243/255})
+        Beast_Tracker.setColorTint({243/255, 243/255, 243/255})
+        Beast_Tracker.setPosition(newPos)
+    elseif current_tracker_index == 0 then
+        broadcastToAll("BEAST HAS YEILDED", {255/255, 0/255, 0/255})
+        Beast_Tracker.setColorTint({255/255, 66/255, 0/255})
+
+        current_tracker_index = 6
+        newPos = beastTrackerLocations["pos"][current_tracker_index]
+        Beast_Tracker.setPosition(newPos)
+
+        local theBeastDeck = Beast_Deck.getObjects()
+        local strName = theBeastDeck[#theBeastDeck - 1].nickname
+
+        broadcastToAll(strName .. " has arrived.", {21/255, 203/255, 44/255})
+
+        takeParams = {
+            position = Beast_Discard.getPosition(),
+            top = true,
+        }
+
+        Beast_Deck.takeObject(takeParams)
+    end
+end
+
+function ResetBeastTracker ()
+    current_tracker_index = 6
+
+    local newPos = beastTrackerLocations["pos"][current_tracker_index]
+
+    broadcastToAll("BEAST AT LEVEL " .. current_tracker_index, {255/255, 66/255, 0/255})
+    Beast_Tracker.setColorTint({255/255, 66/255, 0/255})
+    Beast_Tracker.setPosition(newPos)
+
+    dead_beasts = {}
+end
+
+
+--THIS WILL TRACK ANYTHING PICKED UP
+function onObjectPickUp(player_color, picked_up_object)
+    if picked_up_object.getDescription() == "Beast" then
+        beastAlreadyInList = false
+        for i, v in ipairs(dead_beasts) do
+            if v == picked_up_object.getName() then
+                beastAlreadyInList = true
+            end
+        end
+        if beastAlreadyInList == false then
+            table.insert(dead_beasts, picked_up_object.getName())
+            current_tracker_index = 6
+            Beast_Tracker.setPosition(beastTrackerLocations["pos"][current_tracker_index])
+            Beast_Tracker.setColorTint({255/255, 66/255, 0/255})
+
+        end
+    end
+    if picked_up_object.getDescription() == "Rune" then
+        fillRuneZone()
+    end
+    if picked_up_object.getDescription() == "Quest" then
+        fillQuestZone()
+    end
+end
+
+function heatMessage()
+
+    if ouchyBurns < 3 then
+        broadcastToAll("FEEL THE HEAT!!", {255, 0, 0})
+        ouchyBurns = ouchyBurns + 1
+    end
+
+    if ouchyBurns == 3 then
+        broadcastToAll("USE THE D%#$ HANDLE", {0,255,0})
+        ouchyBurns = 0
+    end
+end
+
+function setNumberOfPlayers(n)
+    numberOfPlayers = n.n
+    print("NUMBER OF PLAYERS = " .. numberOfPlayers)
+end
+
+
+function fillCharZones()
+    local zoneOne = CharOneZone.getObjects()
+    local zoneTwo = CharTwoZone.getObjects()
+    local zoneThree = CharThreeZone.getObjects()
+    local zoneFour = CharFourZone.getObjects()
+    local zoneFive = CharFiveZone.getObjects()
+
+    local zoneDeck = Char_Deck_Zone.getObjects()
+    --WORKING HERE!!!
+    --print(zoneDeck[1])
+    --for i, v in ipairs(zoneDeck[1]) do
+    --    print(v)
+    --end
+    --print(zoneDeck)
+    --print(#zoneDeck)
+
+    local theDeckN = {}
+    theDeckN = zoneDeck[1].getObjects()
+    print(#theDeckN)
+    --for i, v in ipairs(theDeck) do
+    --    print(v.index)
+    --end
+    --if #theDeck > 2 then
+    --    print("TWO OR MORE CARDSa")
+    --end
+    local minNeeded = 8
+
+    --[[if numberOfPlayers == 1 or numberOfPlayers == 2 then
+    minNeeded = 7
+elseif numberOfPlayers == 3 then
+minNeeded = 10
+elseif numberOfPlayers == 4 then
+minNeeded = 13
+end]]--
+
+if #theDeckN > minNeeded then
+    --if zoneDeck[1].guid == Char_Deck.guid then
+    local positionToTake = 1
+    local cardsToFlip = {}
+    local theDeck = theDeckN
+
+    if zoneOne[1] == nil then
+
+        table.insert(cardsToFlip, theDeck[positionToTake].guid)
+        print(cardsToFlip)
+
+        takeParams = {
+            position = CharOneZone.getPosition(),
+            top = true,
+            smooth = true,
+        }
+
+        zoneDeck[1].takeObject(takeParams)
+        positionToTake = positionToTake + 1
+
+    end
+
+    if zoneTwo[1] == nil then
+
+        table.insert(cardsToFlip, theDeck[positionToTake].guid)
+        print(cardsToFlip)
+
+        takeParams = {
+            position = CharTwoZone.getPosition(),
+            top = true,
+            smooth = true,
+        }
+
+        zoneDeck[1].takeObject(takeParams)
+        positionToTake = positionToTake + 1
+
+
+    end
+
+    if zoneThree[1] == nil then
+
+        table.insert(cardsToFlip, theDeck[positionToTake].guid)
+        print(cardsToFlip)
+
+        takeParams = {
+            position = CharThreeZone.getPosition(),
+            top = true,
+            smooth = true,
+        }
+
+        zoneDeck[1].takeObject(takeParams)
+        positionToTake = positionToTake + 1
+
+
+    end
+
+    if numberOfPlayers >= 3 then
+        if zoneFour[1] == nil then
+
+            table.insert(cardsToFlip, theDeck[positionToTake].guid)
+            print(cardsToFlip)
+
+            takeParams = {
+                position = CharFourZone.getPosition(),
+                top = true,
+                smooth = true,
+            }
+
+            zoneDeck[1].takeObject(takeParams)
+            positionToTake = positionToTake + 1
+
+        end
+    end
+
+    if numberOfPlayers >= 4 then
+        if zoneFive[1] == nil then
+
+            table.insert(cardsToFlip, theDeck[positionToTake].guid)
+            print(cardsToFlip)
+
+            takeParams = {
+                position = CharFiveZone.getPosition(),
+                top = true,
+                smooth = true,
+            }
+
+            zoneDeck[1].takeObject(takeParams)
+            positionToTake = positionToTake + 1
+
+        end
+    end
+
+
+    Timer.create({
+        identifier     = "blah2",
+        function_name  = "flipThese",
+        parameters     = cardsToFlip,
+        delay          = 1.5,
+    })
+
+    --end25
+
+else
+
+    shuffCharsBack()
+
+
+    Timer.create({
+        identifier = "shuffwaitchars",
+        function_name = "fillCharZones",
+        delay = 4.5,
+    })
+end
+
+
+end
+
+function shuffCharsBack()
+    local zoneDeck = Char_Deck_Zone.getObjects()
+    local theseCardsTop = zoneDeck[1].getObjects()
+
+    local thisDiscard = CharDiscardZone.getObjects()
+    local theseCardsBottom = thisDiscard[1]
+
+    thisShuffleZone = {}
+    table.insert(thisShuffleZone, theseCardsBottom)
+    local thisFlipZone = {}
+    table.insert(thisFlipZone, theseCardsBottom)
+
+    Timer.create({
+        identifier     = "startingFlipChars",
+        function_name  = "flipWait",
+        parameters     = thisFlipZone,
+        delay          = 0.5,
+    })
+    --theseCardsBottom.flip()
+
+
+    Timer.create({
+        identifier     = "startingShuffleChar",
+        function_name  = "shuffleTheseZones",
+        parameters     = thisShuffleZone,
+        delay          = 0.1,
+        repetitions    = 8,
+    })
+
+
+    Timer.create({
+        identifier = "shuffwaitchars2",
+        function_name = "waitForMove",
+        delay = 1.0,
+    })
+end
+
+function flipWait(paras)
+    paras[1].flip()
+end
+
+function waitForMove ()
+    local zoneDeck = Char_Deck_Zone.getObjects()
+    local theseCardsTop = zoneDeck[1]
+
+    local thisDiscard = CharDiscardZone.getObjects()
+    local theseCardsBottom = thisDiscard[1]
+
+    theseCardsTop.setPositionSmooth(CharDiscardZone.getPosition(), false, false)
+
+    Timer.create({
+        identifier = "shuffwaitchars3",
+        function_name = "waitForMove2",
+        delay = 2.0,
+    })
+end
+
+function waitForMove2()
+    local thisDiscard = CharDiscardZone.getObjects()
+    local theNewDeck = thisDiscard[1]
+
+    theNewDeck.setPositionSmooth(Char_Deck_Zone.getPosition(), false, false)
+end
+
+function flipThese(theCards)
+    card1 = getObjectFromGUID(theCards[1])
+    card2 = getObjectFromGUID(theCards[2])
+    card3 = getObjectFromGUID(theCards[3])
+    card4 = getObjectFromGUID(theCards[4])
+    card5 = getObjectFromGUID(theCards[5])
+    local cards = {card1, card2, card3, card4, card5}
+
+    for i, v in ipairs(cards) do
+        if v ~= nil then
+            v.flip()
+        end
+    end
+
+    --print("HELLO IM WORKING")
+
+end
+
+function fillQuestZone()
+    local QZone = QuestZone.getObjects()
+
+    if QZone[1] == nil then
+        takeParams = {
+            position = QuestZone.getPosition(),
+            top = true,
+            smooth = true,
+        }
+
+        QuestDeck.takeObject(takeParams)
+    end
+end
+
+function fillRuneZone()
+    print("GOT HERE")
+    local RZone = Rune_Zone.getObjects()
+    print("GOT HERE NOW")
+    if RZone[1] == nil then
+        takeParams = {
+            position = Rune_Zone.getPosition(),
+            top = true,
+            smooth = true,
+        }
+
+        Rune_Deck.takeObject(takeParams)
+    end
+end
+
+function clearChars()
+    local zoneOne = CharOneZone.getObjects()
+    local zoneTwo = CharTwoZone.getObjects()
+    local zoneThree = CharThreeZone.getObjects()
+    local zoneFour = CharFourZone.getObjects()
+    local zoneFive = CharFiveZone.getObjects()
+
+    if zoneOne[1] ~= nil then
+        zoneOne[1].setPosition(CharDiscardZone.getPosition())
+    end
+    if zoneTwo[1] ~= nil then
+        zoneTwo[1].setPosition(CharDiscardZone.getPosition())
+    end
+    if zoneThree[1] ~= nil then
+        zoneThree[1].setPosition(CharDiscardZone.getPosition())
+    end
+    if zoneFour[1] ~= nil then
+        zoneFour[1].setPosition(CharDiscardZone.getPosition())
+    end
+    if zoneFive[1] ~= nil then
+        zoneFive[1].setPosition(CharDiscardZone.getPosition())
+    end
+end
+
+function newGame()
+    Dig_Clock.Clock.startStopwatch()
+
+    local boardPinkObjs = Board_Zone_Pink.getObjects()
+    local boardRedObjs = Board_Zone_Red.getObjects()
+    local boardBlueObjs = Board_Zone_Blue.getObjects()
+    local boardBrownObjs = Board_Zone_Brown.getObjects()
+    local boardGrayObjs = Board_Zone_Gray.getObjects()
+
+    local numPlayers = 0
+    local globalZonesToShufPlusPlayerhands = globalShuffleZones
+    local drawToThesePlayers = {}
+    local blueGottaBeDifferentDontIt = {}
+
+    if boardPinkObjs[1] != nil then
+        numPlayers = numPlayers + 1
+
+        boardPinkObjs[1].setColorTint({238/255, 90/255, 207/255})
+
+        local loc = boardPinkObjs[1].getName()
+
+        if loc == "One" then
+            Board_Pink.setPosition(PlayerBoardLoc.One)
+            Starter_Toppings_One.setPosition(Player_One_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_One)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Two" then
+            Board_Pink.setPosition(PlayerBoardLoc.Two)
+            Starter_Toppings_Two.setPosition(Player_Two_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Two)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Three" then
+            Board_Pink.setPosition(PlayerBoardLoc.Three)
+            Board_Pink.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Three.setPosition(Player_Three_Draw.getPosition())
+            Starter_Toppings_Three.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Three)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Four" then
+            Board_Pink.setPosition(PlayerBoardLoc.Four)
+            Board_Pink.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Four.setPosition(Player_Four_Draw.getPosition())
+            Starter_Toppings_Four.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Four)
+            table.insert(drawToThesePlayers, loc)
+        end
+
+        if loc == "One" or loc == "Two" then
+            Potion_Blue.clone({
+                position = {(Board_Pink.getPosition()[1] - 5.0), Board_Pink.getPosition()[2], Board_Pink.getPosition()[3] - 1.5}
+            })
+            Potion_Blue.clone({
+                position = {(Board_Pink.getPosition()[1] - 5.0), Board_Pink.getPosition()[2], Board_Pink.getPosition()[3] + 1.5}
+            })
+        elseif loc == "Three" or loc == "Four" then
+            thisOne = Potion_Blue.clone({
+                position = {(Board_Pink.getPosition()[1] + 5.0), Board_Pink.getPosition()[2], Board_Pink.getPosition()[3] - 1.5}
+            })
+            thisTwo = Potion_Blue.clone({
+                position = {(Board_Pink.getPosition()[1] + 5.0), Board_Pink.getPosition()[2], Board_Pink.getPosition()[3] + 1.5}
+            })
+
+            thisOne.setRotation({0.00, 0.00, 180.00})
+            thisTwo.setRotation({0.00, 0.00, 180.00})
+        end
+
+
+        for i, v in ipairs(playerZoneInfo) do
+            if v.player == loc then
+                boardPinkObjs[1].setPosition(v.spawnMod)
+            end
+        end
+
+    end
+
+    if boardRedObjs[1] != nil then
+        numPlayers = numPlayers + 1
+
+        boardRedObjs[1].setColorTint({213/255, 89/255, 36/255})
+
+        local loc = boardRedObjs[1].getName()
+
+        if loc == "One" then
+            Board_Red.setPosition(PlayerBoardLoc.One)
+            Starter_Toppings_One.setPosition(Player_One_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_One)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Two" then
+            Board_Red.setPosition(PlayerBoardLoc.Two)
+            Starter_Toppings_Two.setPosition(Player_Two_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Two)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Three" then
+            Board_Red.setPosition(PlayerBoardLoc.Three)
+            Board_Red.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Three.setPosition(Player_Three_Draw.getPosition())
+            Starter_Toppings_Three.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Three)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Four" then
+            Board_Red.setPosition(PlayerBoardLoc.Four)
+            Board_Red.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Four.setPosition(Player_Four_Draw.getPosition())
+            Starter_Toppings_Four.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Four)
+            table.insert(drawToThesePlayers, loc)
+        end
+
+        if loc == "One" or loc == "Two" then
+            Potion_Red.clone({
+                position = {(Board_Red.getPosition()[1] - 5.0), Board_Red.getPosition()[2], Board_Red.getPosition()[3] - 1.5}
+            })
+            Dice_Red.clone({
+                position = {(Board_Red.getPosition()[1] - 5.0), Board_Red.getPosition()[2], Board_Red.getPosition()[3] + 1.5}
+            })
+        elseif loc == "Three" or loc == "Four" then
+            thisOne = Potion_Red.clone({
+                position = {(Board_Red.getPosition()[1] + 5.0), Board_Red.getPosition()[2], Board_Red.getPosition()[3] + 1.5}
+            })
+            Dice_Red.clone({
+                position = {(Board_Red.getPosition()[1] + 5.0), Board_Red.getPosition()[2], Board_Red.getPosition()[3] - 1.5}
+            })
+
+            thisOne.setRotation({0.00, 0.00, 180.00})
+        end
+
+        for i, v in ipairs(playerZoneInfo) do
+            if v.player == loc then
+                boardRedObjs[1].setPosition(v.spawnMod)
+            end
+        end
+    end
+
+    if boardBlueObjs[1] != nil then
+        numPlayers = numPlayers + 1
+
+        boardBlueObjs[1].setColorTint({35/255, 117/255, 182/255})
+
+        local loc = boardBlueObjs[1].getName()
+
+        if loc == "One" then
+            Board_Blue.setPosition(PlayerBoardLoc.One)
+            Starter_Toppings_One.setPosition(Player_One_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_One)
+            table.insert(blueGottaBeDifferentDontIt, loc)
+        elseif loc == "Two" then
+            Board_Blue.setPosition(PlayerBoardLoc.Two)
+            Starter_Toppings_Two.setPosition(Player_Two_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Two)
+            table.insert(blueGottaBeDifferentDontIt, loc)
+        elseif loc == "Three" then
+            Board_Blue.setPosition(PlayerBoardLoc.Three)
+            Board_Blue.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Three.setPosition(Player_Three_Draw.getPosition())
+            Starter_Toppings_Three.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Three)
+            table.insert(blueGottaBeDifferentDontIt, loc)
+        elseif loc == "Four" then
+            Board_Blue.setPosition(PlayerBoardLoc.Four)
+            Board_Blue.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Four.setPosition(Player_Four_Draw.getPosition())
+            Starter_Toppings_Four.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Four)
+            table.insert(blueGottaBeDifferentDontIt, loc)
+        end
+
+        if loc == "One" or loc == "Two" then
+            Potion_Green.clone({
+                position = {(Board_Blue.getPosition()[1] - 5.0), Board_Blue.getPosition()[2], Board_Blue.getPosition()[3] - 1.5}
+            })
+            Dice_Blue.clone({
+                position = {(Board_Blue.getPosition()[1] - 5.0), Board_Blue.getPosition()[2], Board_Blue.getPosition()[3] + 1.5}
+            })
+        elseif loc == "Three" or loc == "Four" then
+            thisOne = Potion_Green.clone({
+                position = {(Board_Blue.getPosition()[1] + 5.0), Board_Blue.getPosition()[2], Board_Blue.getPosition()[3] + 1.5}
+            })
+            Dice_Blue.clone({
+                position = {(Board_Blue.getPosition()[1] + 5.0), Board_Blue.getPosition()[2], Board_Blue.getPosition()[3] - 1.5}
+            })
+
+            thisOne.setRotation({0.00, 0.00, 180.00})
+        end
+
+        for i, v in ipairs(playerZoneInfo) do
+            if v.player == loc then
+                boardBlueObjs[1].setPosition(v.spawnMod)
+            end
+        end
+    end
+
+    if boardBrownObjs[1] != nil then
+        numPlayers = numPlayers + 1
+
+        boardBrownObjs[1].setColorTint({155/255, 107/255, 64/255})
+
+        local loc = boardBrownObjs[1].getName()
+
+        if loc == "One" then
+            Board_Brown.setPosition(PlayerBoardLoc.One)
+            Starter_Toppings_One.setPosition(Player_One_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_One)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Two" then
+            Board_Brown.setPosition(PlayerBoardLoc.Two)
+            Starter_Toppings_Two.setPosition(Player_Two_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Two)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Three" then
+            Board_Brown.setPosition(PlayerBoardLoc.Three)
+            Board_Brown.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Three.setPosition(Player_Three_Draw.getPosition())
+            Starter_Toppings_Three.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Three)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Four" then
+            Board_Brown.setPosition(PlayerBoardLoc.Four)
+            Board_Brown.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Four.setPosition(Player_Four_Draw.getPosition())
+            Starter_Toppings_Four.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Four)
+            table.insert(drawToThesePlayers, loc)
+        end
+
+        if loc == "One" or loc == "Two" then
+            Dice_White.clone({
+                position = {(Board_Brown.getPosition()[1] - 5.0), Board_Brown.getPosition()[2], Board_Brown.getPosition()[3] - 1.5}
+            })
+            Dice_Green.clone({
+                position = {(Board_Brown.getPosition()[1] - 5.0), Board_Brown.getPosition()[2], Board_Brown.getPosition()[3] + 1.5}
+            })
+        elseif loc == "Three" or loc == "Four" then
+            Dice_White.clone({
+                position = {(Board_Brown.getPosition()[1] + 5.0), Board_Brown.getPosition()[2], Board_Brown.getPosition()[3] + 1.5}
+            })
+            Dice_Green.clone({
+                position = {(Board_Brown.getPosition()[1] + 5.0), Board_Brown.getPosition()[2], Board_Brown.getPosition()[3] - 1.5}
+            })
+        end
+
+        for i, v in ipairs(playerZoneInfo) do
+            if v.player == loc then
+                boardBrownObjs[1].setPosition(v.spawnMod)
+            end
+        end
+    end
+
+    if boardGrayObjs[1] != nil then
+        numPlayers = numPlayers + 1
+
+        boardGrayObjs[1].setColorTint({138/255, 138/255, 138/255})
+
+        local loc = boardGrayObjs[1].getName()
+
+        if loc == "One" then
+            Board_Gray.setPosition(PlayerBoardLoc.One)
+            Starter_Toppings_One.setPosition(Player_One_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_One)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Two" then
+            Board_Gray.setPosition(PlayerBoardLoc.Two)
+            Starter_Toppings_Two.setPosition(Player_Two_Draw.getPosition())
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Two)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Three" then
+            Board_Gray.setPosition(PlayerBoardLoc.Three)
+            Board_Gray.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Three.setPosition(Player_Three_Draw.getPosition())
+            Starter_Toppings_Three.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Three)
+            table.insert(drawToThesePlayers, loc)
+        elseif loc == "Four" then
+            Board_Gray.setPosition(PlayerBoardLoc.Four)
+            Board_Gray.setRotation({360, 0.00, 0.00})
+            Starter_Toppings_Four.setPosition(Player_Four_Draw.getPosition())
+            Starter_Toppings_Four.setRotation({0.00, 0.00, 180.00})
+            table.insert(globalZonesToShufPlusPlayerhands, Starter_Toppings_Four)
+            table.insert(drawToThesePlayers, loc)
+        end
+
+        if loc == "One" or loc == "Two" then
+            Dice_White.clone({
+                position = {(Board_Gray.getPosition()[1] - 5.0), Board_Gray.getPosition()[2], Board_Gray.getPosition()[3] - 1.5}
+            })
+            Dice_Black.clone({
+                position = {(Board_Gray.getPosition()[1] - 5.0), Board_Gray.getPosition()[2], Board_Gray.getPosition()[3] + 1.5}
+            })
+        elseif loc == "Three" or loc == "Four" then
+            Dice_White.clone({
+                position = {(Board_Gray.getPosition()[1] + 5.0), Board_Gray.getPosition()[2], Board_Gray.getPosition()[3] + 1.5}
+            })
+            Dice_Black.clone({
+                position = {(Board_Gray.getPosition()[1] + 5.0), Board_Gray.getPosition()[2], Board_Gray.getPosition()[3] - 1.5}
+            })
+        end
+
+        for i, v in ipairs(playerZoneInfo) do
+            if v.player == loc then
+                boardGrayObjs[1].setPosition(v.spawnMod)
+            end
+        end
+    end
+
+    numberOfPlayers = numPlayers
+
+    Timer.create({
+        identifier     = "startingShuffle",
+        function_name  = "shuffleTheseZones",
+        parameters     = globalShuffleZones,
+        delay          = 0.2,
+        repetitions    = 7,
+    })
+
+    Timer.create({
+        identifier     = "startingfillzones2",
+        function_name  = "startFillZones",
+        parameters     = globalShuffleZones,
+        delay          = 2,
+    })
+
+    Timer.create({
+        identifier = "startingDealBlue",
+        function_name = "startingDealBlue",
+        parameters = blueGottaBeDifferentDontIt,
+        delay = 2,
+    })
+
+    Timer.create({
+        identifier = "startingDeal",
+        function_name = "startingDeal",
+        parameters = drawToThesePlayers,
+        delay = 2,
+    })
+
+    Timer.create({
+        identifier = "startingChars",
+        function_name = "fillCharZones",
+        delay = 2,
+    })
+
+
+end
+
+function startingDeal (drawToThese)
+    for i, v in ipairs(drawToThese) do
+        if v == "One" then
+            Starter_Toppings_One.dealToColor(5, "White")
+        elseif v == "Two" then
+            Starter_Toppings_Two.dealToColor(5, "Red")
+        elseif v == "Three" then
+            Starter_Toppings_Three.dealToColor(5, "Green")
+        elseif v == "Four" then
+            Starter_Toppings_Four.dealToColor(5, "Blue")
+        end
+    end
+end
+
+function startingDealBlue (drawToThisOne)
+    for i, v in ipairs(drawToThisOne) do
+        if v == "One" then
+            Starter_Toppings_One.dealToColor(6, "White")
+            Player_One_Hand_Counter.setValue(6)
+        elseif v == "Two" then
+            Starter_Toppings_Two.dealToColor(6, "Red")
+            Player_Two_Hand_Counter.setValue(6)
+        elseif v == "Three" then
+            Starter_Toppings_Three.dealToColor(6, "Green")
+            Player_Three_Hand_Counter.setValue(6)
+        elseif v == "Four" then
+            Starter_Toppings_Four.dealToColor(6, "Blue")
+            Player_Four_Hand_Counter.setValue(6)
+        end
+    end
+end

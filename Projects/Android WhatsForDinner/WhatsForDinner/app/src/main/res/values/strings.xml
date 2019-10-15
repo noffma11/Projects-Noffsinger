@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Family Meal Time</string>
+    <string name="randomMeal">Random Meal</string>
+    <string name="profileTitle">Profile:</string>
+    <string name="titleMyFamily">My Family</string>
+    <string name="whosEating">My Family</string>
+    <string name="buttonBrowse">Browse</string>
+    <string name="buttonCreate">Create</string>
+    <string name="mealsText">Meals</string>
+    <string name="memberTitle">Member:</string>
+    <string name="listViewLikesTitle">Likes:</string>
+    <string name="listViewAllergiesTitle">Allergies</string>
+    <string name="searchHint">What ingredient do you have?</string>
+    <string name="WFDbuttonTest">What\'s For Dinner?</string>
+    <string-array name="familyMembers">
+        <item><string name="Bob">Bob</string></item>
+        <item><string name="Tom">Tom</string></item>
+        <item><string name="Ron">Ron</string></item>
+    </string-array>
+</resources>

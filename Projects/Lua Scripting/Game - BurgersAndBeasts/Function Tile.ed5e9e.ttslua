@@ -1,0 +1,73 @@
+function onLoad()
+
+    --self.setPosition({24,1,1.25})
+
+    self.createButton({
+        label="1", click_function="onePlayerGame", function_owner=self,
+        position={-0.65,0.0,-0.11}, width=200, height=200, font_size=200
+    })
+
+    self.createButton({
+        label="2", click_function="twoPlayerGame", function_owner=self,
+        position={-0.21,0.0,-0.11}, width=200, height=200, font_size=200
+    })
+
+    self.createButton({
+        label="3", click_function="threePlayerGame", function_owner=self,
+        position={0.23,0.0,-0.11}, width=200, height=200, font_size=200
+    })
+
+    self.createButton({
+        label="4", click_function="fourPlayerGame", function_owner=self,
+        position={0.67,0.0,-0.11}, width=200, height=200, font_size=200
+    })
+
+    self.createButton({
+        label="new", click_function="newGame", function_owner=self,
+        position={-0.45,0.0,0.5}, width=400, height=400, font_size=200
+    })
+
+    self.createButton({
+        label="fill", click_function="fillCards", function_owner=self,
+        position={0.48,0.0,0.5}, width=400, height=400, font_size=200
+    })
+
+    --spawnd = 0
+    --owner = 'Red'
+end
+
+function onePlayerGame()
+    Global.call('setNumberOfPlayers', {n = 1})
+end
+
+function twoPlayerGame()
+    Global.call('setNumberOfPlayers', {n = 2})
+end
+
+function threePlayerGame()
+    Global.call('setNumberOfPlayers', {n = 3})
+end
+
+function fourPlayerGame()
+    Global.call('setNumberOfPlayers', {n = 4})
+end
+
+function newGame()
+    Global.call('newGame', {})
+    print("new")
+end
+
+function fillCards()
+    print("fill")
+end
+
+
+
+--EXAMPLE CODE SECTION --
+
+--[[
+
+numberOfPlayers = Global.getVar('numberOfPlayers')
+Global.call('heatMessage')
+
+]]
